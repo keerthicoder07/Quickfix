@@ -72,6 +72,38 @@ Questions of B1
     When a browser hits /api/resource/Job Card/JC-2024-0001 - what happens differently compared to /api/method/?
         Where the first url returns the data of the doctype in the json with doctype name and document name and the second url which executes the custom python function by the developer.
     
+    When a browser hits /track-job - which file/function handles it and why?
+        The file named track-job.html or track-job.py and where the frappe expect the function get_context to render the content and where it check in the www folder since it is not any api methods or requests.
+
+    Open your Frappe site in browser devtools. Find the X-Frappe-CSRF-Token in a
+    POST request. Where does this value come from and what would happen if you
+    omitted it? 
+        The X-frappe-csrf token automatically created by the server during the login and store it in the server side and sent to the web browser through the cookies so whenever the user try to make post,put or delete action it validates the csrf token so we can block the malicious attacks if it is omitted where any other malicious users can done the post,put or delete actions.
+    
+    In bench console, run: import frappe; frappe.session.data and describe what it
+    contains?
+        In the session data where it contains the current user details like their unique session id and their name and what type of user and also contains the ip address and time stamps included with the csrf token
+    
+    With developer_mode: 1 - trigger a Python exception in one of your whitelisted
+    methods. What does the browser receive?
+        With this mode where browser recieves the traceback error in json and it displays the traceback the total error
+    
+    Set developer_mode: 0 - repeat. What does the browser receive now? Why is this
+    important for production?
+        With this mode where browser recieves the http error like internal server error because when the traceback display the user gets annoyed and also cannot find what's the problem so it is important in the production side.
+    
+    Where do production errors go if they are hidden from the browser?
+        The production errors are still maintain in the error logs internally where we can also access through the error log doctype
+    
+    In a whitelisted method, call frappe.get_doc("Job Card", name) WITHOUT
+    ignore_permissions. Then log in as a QF Technician user who is NOT assigned to
+    that job. What error is raised and at what layer does Frappe stop the request?
+        Where the frappe throws the user permission error that this user not have access to that particular resource and it stops at the document model layer
+        after the execution of check_permission function.
+    
+    
+
+
 
 
 
