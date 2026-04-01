@@ -35,17 +35,20 @@
    "label": "Invoice Date"
   },
   {
+   "fetch_from": "job_card.labour_charge",
    "fieldname": "labour_charge",
    "fieldtype": "Currency",
    "label": "Labour Charge"
   },
   {
+   "fetch_from": "job_card.parts_total",
    "fieldname": "parts_total",
    "fieldtype": "Currency",
    "label": "Parts Total",
    "read_only": 1
   },
   {
+   "fetch_from": "job_card.final_amount",
    "fieldname": "total_amount",
    "fieldtype": "Currency",
    "label": "Total Amount",
@@ -62,7 +65,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-03-31 18:24:18.381649",
+ "modified": "2026-04-01 18:11:50.139500",
  "modified_by": "Administrator",
  "module": "QuickFix",
  "name": "Service Invoice",
