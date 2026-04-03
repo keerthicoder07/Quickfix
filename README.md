@@ -348,7 +348,23 @@ PART E
         #where if we do the other.stock_qty-=self.qty during the each validation it will decrease the quantity which leads to the wrong data maintainence so we decrease only after the successful submission.
 
 
-
+Questions of C1
+    When you append a row to Job Card.parts_used and save, what 4 columns does
+    Frappe automatically set on the child table row?
+        When I append the row to the job card in the parts_used the frappe automatically set the 4 columns they are 
+            Parent-Parent of the childtable
+            parent type-Stores the type of the parent
+            parent field-Stored the field name of the childtable in parent
+            idx-It stores the row id
+    What is the DB table name for the Part Usage Entry DocType?
+        The Doctype Part usage entry will be stored with tab prefix as tab Part Usage Entry
+    If you delete row at idx=2 and re-save, what happens to idx values of remaining
+    rows?
+        The frappe will automatically reoreder the idx values once the row id deleted and it always maintains the sequence in order.
+    Rename one of your test Technician records using the Rename Document feature.Then check: does the assigned_technician field on linked Job Cards automaticallyupdate? Why or why not? What does "track changes" mean in this context?
+        Yes the assigned_technician name will be update after the change sonce it is the link datatype which will always be with referential intergrity and the track changes mean where it track the changes in the field that happens in the particular document so we can see the change what happend old->new data
+    Explain unique constraints: what is the difference between setting a field as "unique" in the DocType vs doing a frappe.db.exists() check in validate()?
+        Setting the field as unique will make the changes in db where it will make the column as unique constraint but in db.exists() that check in the validate will not safe where it checks before the save so there is threat to the race condition so the unique method is safer than db.exists() in validate function.
 
             
 
