@@ -11,5 +11,7 @@ class JobCard(Document):
 			self.labour_charge = frappe.db.get_single_value("QuickFix Settings", "default_labour_charge")
 
 	def validate(self):
+		for items in self.parts_used:
+			items.total_price = items.unit_price * items.quantity
 		self.parts_total = sum((item.total_price) for item in self.parts_used)
 		self.final_amount = self.parts_total + self.labour_charge
