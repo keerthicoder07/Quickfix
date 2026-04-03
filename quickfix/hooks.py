@@ -247,12 +247,13 @@ app_license = "mit"
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
 
-fixtures=[
-    {
-        "doctype":"Device Type",
-        "filters":[
-            ["device_type","in",["Smartphone","Laptop","Tablet"]]
-        ]
-    }
+fixtures = [
+	{"doctype": "Device Type", "filters": [["device_type", "in", ["Smartphone", "Laptop", "Tablet"]]]},
+	{"doctype": "Role", "filters": [["name", "in", ["QF Service Staff", "QF Technician", "QF Manager"]]]},
+	{
+		"doctype": "DocPerm",
+		"filters": [
+			["parent", "in", ["Device Type", "Technician", "Spare Part", "Job Card", "Service Invoice"]]
+		],
+	},
 ]
-
