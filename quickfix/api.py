@@ -1,6 +1,8 @@
 from datetime import timedelta
+from typing import Optional
 
 import frappe
+from frappe import _
 from frappe.query_builder import DocType
 from frappe.utils import now_datetime
 
@@ -18,8 +20,8 @@ def get_overdue_jobs():
 	return result
 
 
-@frappe.whitelist
-def transfer_job(from_tech, to_tech):
+@frappe.whitelist()
+def transfer_job(from_tech: str, to_tech: str) -> None:
 	try:
 		frappe.db.sql(
 			"""
@@ -39,7 +41,7 @@ def transfer_job(from_tech, to_tech):
 
 
 @frappe.whitelist()
-def share_job_card(job_card_name, user_email):
+def share_job_card(job_card_name: str, user_email: str) -> None:
 	try:
 		# Check if document exists
 		if not frappe.db.exists("Job Card", job_card_name):
@@ -75,18 +77,21 @@ def manager_only_action():
 
 
 @frappe.whitelist()
-def get_job_card_permission_query_conditions(user):
+def get_job_card_permission_query_conditions(user: str | None = None) -> str | None:
 	if not user:
 		user = frappe.session.user
+
 	roles = frappe.get_roles(user)
+
 	if "QF Technician" in roles and "QF Manager" not in roles:
 		return f"""
-		`tabJob Card`.assigned_technician IN(
-		select name from `tabTechnician`
-		where user='{user}'
-		)
-		"""
-	return ""
+            `tabJob Card`.assigned_technician IN (
+                SELECT name FROM `tabTechnician`
+                WHERE user = {frappe.db.escape(user)}
+            )
+        """
+
+	return None
 
 
 @frappe.whitelist()
