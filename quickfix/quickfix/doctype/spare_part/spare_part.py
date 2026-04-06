@@ -7,6 +7,5 @@ from frappe.model.document import Document
 
 class SparePart(Document):
 	def before_save(self):
-		if(self.unit_cost>self.selling_price):
+		if self.unit_cost > self.selling_price:
 			frappe.throw("Always selling price should greater than unit cost")
-
