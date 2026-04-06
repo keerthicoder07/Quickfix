@@ -45,11 +45,11 @@ def share_job_card(job_card_name: str, user_email: str) -> None:
 	try:
 		# Check if document exists
 		if not frappe.db.exists("Job Card", job_card_name):
-			frappe.throw("Job Card not found")
+			frappe.throw(_("Job Card not found"))
 
 		# Check if user exists
 		if not frappe.db.exists("User", user_email):
-			frappe.throw("User not found")
+			frappe.throw(_("User not found"))
 
 		# Share the document
 		frappe.share.add(
