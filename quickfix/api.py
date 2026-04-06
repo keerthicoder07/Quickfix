@@ -72,3 +72,30 @@ def manager_only_action():
 	frappe.only_for("QF Manager")
 
 	return {"status": "success", "message": "You are authorized as QF Manager"}
+
+
+@frappe.whitelist()
+def get_job_card_permission_query_conditions(user):
+	if not user:
+		user = frappe.session.user
+	roles = frappe.get_roles(user)
+	if "QF Technician" in roles and "QF Manager" not in roles:
+		return f"""
+		`tabJob Card`.assigned_technician IN(
+		select name from `tabTechnician`
+		where user='{user}'
+		)
+		"""
+	return ""
+
+
+@frappe.whitelist()
+def get_job_cards_safe():
+	user = frappe.session.user
+	roles = frappe.get_roles(user)
+	data = frappe.get_list("Job Card", fields="*")
+	if "QF Manager" not in roles:
+		for row in data:
+			row.pop("customer_phone", None)
+			row.pop("customer_email", None)
+	return data

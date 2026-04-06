@@ -366,6 +366,10 @@ Questions of C1
     Explain unique constraints: what is the difference between setting a field as "unique" in the DocType vs doing a frappe.db.exists() check in validate()?
         Setting the field as unique will make the changes in db where it will make the column as unique constraint but in db.exists() that check in the validate will not safe where it checks before the save so there is threat to the race condition so the unique method is safer than db.exists() in validate function.
 
+Questions D2
+    What is the issues in using frappe.get_all in a whitelisted method that is exposed to guests or low-privilege users. Explain it in the context of permission_query_conditions?
+        While using the get_all in whitelistted method where it will not check any permissions and even give the data to any user and guests so where the hook function permission_query_conditions will check whetehr user
+
             
 
 
