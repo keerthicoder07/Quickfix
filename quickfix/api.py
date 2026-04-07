@@ -116,3 +116,14 @@ def send_job_ready_email(job_card, user, customer_email):
 		subject=("Your Job is Ready"),
 		message=(f"Your jobcard {job_card} is ready for delivery"),
 	)
+
+
+@frappe.whitelist()
+def rename_technician(old_name, new_name):
+	if not frappe.db.exists("Technician", old_name):
+		frappe.throw("Old Technician not found")
+	if frappe.db.exists("Technician", new_name):
+		frappe.throw("New Technician already exists")
+	frappe.rename_doc(
+		"Technician", old_name, new_name, merge=False
+	)  # When we give merge=True then whetehr there is document with the new name where that data will be overwite in the old name document so the data will loss

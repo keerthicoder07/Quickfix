@@ -9,3 +9,8 @@ class SparePart(Document):
 	def before_save(self):
 		if self.unit_cost > self.selling_price:
 			frappe.throw("Always selling price should greater than unit cost")
+
+	def autoname(self):
+		if self.part_code:
+			self.part_code = self.part_code.upper()
+		self.name = frappe.model.naming.make_autoname("Sp-.YYYY.-.#####")
