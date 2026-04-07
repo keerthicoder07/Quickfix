@@ -16,14 +16,5 @@
   "doctype": "Device Type",
   "modified": "2026-03-31 13:17:09.541774",
   "name": "Laptop"
- },
- {
-  "average_repair_hours": 0,
-  "description": null,
-  "device_type": "Tablet",
-  "docstatus": 0,
-  "doctype": "Device Type",
-  "modified": "2026-03-31 13:17:18.019272",
-  "name": "Tablet"
  }
 ]

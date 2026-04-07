@@ -41,6 +41,7 @@ This app can use GitHub Actions for CI. The following workflows are configured:
 mit
 
 Questions of A2
+
     What is Config file?
         The config file which are used to set the settings among the sites where we have the two types of config file
 
@@ -65,6 +66,7 @@ Questions of A2
         If the worker crashes the background jobs will remains in the job queue and will not execute
 
 Questions of B1
+
     When a browser hits /api/method/quickfix.api.get_job_summary - what Python
     function handles this request and how does Frappe find it?
         In this scenario the python function executes and written the data in the json form and where the frappe finds the request using the module,class name and the function name and map the url to the handlers.
@@ -101,7 +103,274 @@ Questions of B1
         Where the frappe throws the user permission error that this user not have access to that particular resource and it stops at the document model layer
         after the execution of check_permission function.
     
+Questions of B2
+PART A
+    Run: frappe.db.sql("SHOW TABLES LIKE '%Job%'") and list what you see. Explain
+    the tab prefix convention.
+        In [2]: frappe.db.sql("show tables like '%Job%'")
+        Out[2]: (('tabJob Card',), ('tabScheduled Job Log',), ('tabScheduled Job Type',))
+
+        So the tab prefix convention avoid the naming conflcits and give the easy identification to retrive the tables easily and helps orm to easilt map with doctype.
     
+    Run: frappe.db.sql("DESCRIBE `tabJob Card`", as_dict=True) and list 5 column
+    names you recognise from your DocType fields.
+    
+        In [3]: frappe.db.sql("describe `tabJob Card`",as_dict=True)
+        Out[3]: 
+        [{'Field': 'name',
+        'Type': 'varchar(140)',
+        'Null': 'NO',
+        'Key': 'PRI',
+        'Default': None,
+        'Extra': ''},
+        {'Field': 'creation',
+        'Type': 'datetime(6)',
+        'Null': 'YES',
+        'Key': '',
+        'Default': None,
+        'Extra': ''},
+        {'Field': 'modified',
+        'Type': 'datetime(6)',
+        'Null': 'YES',
+        'Key': 'MUL',
+        'Default': None,
+        'Extra': ''},
+        {'Field': 'modified_by',
+        'Type': 'varchar(140)',
+        'Null': 'YES',
+        'Key': '',
+        'Default': None,
+        'Extra': ''},
+        {'Field': 'owner',
+        'Type': 'varchar(140)',
+        'Null': 'YES',
+        'Key': '',
+        'Default': None,
+        'Extra': ''},
+        {'Field': 'docstatus',
+        'Type': 'int(1)',
+        'Null': 'NO',
+        'Key': '',
+        'Default': '0',
+        'Extra': ''},
+        {'Field': 'idx',
+        'Type': 'int(8)',
+        'Null': 'NO',
+        'Key': '',
+        'Default': '0',
+        'Extra': ''},
+        {'Field': 'amended_from',
+        'Type': 'varchar(140)',
+        'Null': 'YES',
+        'Key': 'MUL',
+        'Default': None,
+        'Extra': ''},
+        {'Field': '_user_tags',
+        'Type': 'text',
+        'Null': 'YES',
+        'Key': '',
+        'Default': None,
+        'Extra': ''},
+        {'Field': '_comments',
+        'Type': 'text',
+        'Null': 'YES',
+        'Key': '',
+        'Default': None,
+        'Extra': ''},
+        {'Field': '_assign',
+        'Type': 'text',
+        'Null': 'YES',
+        'Key': '',
+        'Default': None,
+        'Extra': ''},
+        {'Field': '_liked_by',
+        'Type': 'text',
+        'Null': 'YES',
+        'Key': '',
+        'Default': None,
+        'Extra': ''},
+        {'Field': 'customer_name',
+        'Type': 'varchar(140)',
+        'Null': 'YES',
+        'Key': '',
+        'Default': None,
+        'Extra': ''},
+        {'Field': 'customer_phone',
+        'Type': 'varchar(140)',
+        'Null': 'YES',
+        'Key': '',
+        'Default': None,
+        'Extra': ''},
+        {'Field': 'customer_email',
+        'Type': 'varchar(140)',
+        'Null': 'YES',
+        'Key': '',
+        'Default': None,
+        'Extra': ''},
+        {'Field': 'device_type',
+        'Type': 'varchar(140)',
+        'Null': 'YES',
+        'Key': '',
+        'Default': None,
+        'Extra': ''},
+        {'Field': 'device_brand',
+        'Type': 'varchar(140)',
+        'Null': 'YES',
+        'Key': '',
+        'Default': None,
+        'Extra': ''},
+        {'Field': 'device_model',
+        'Type': 'varchar(140)',
+        'Null': 'YES',
+        'Key': '',
+        'Default': None,
+        'Extra': ''},
+        {'Field': 'imei_or_serial',
+        'Type': 'varchar(140)',
+        'Null': 'YES',
+        'Key': '',
+        'Default': None,
+        'Extra': ''},
+        {'Field': 'problem_description',
+        'Type': 'longtext',
+        'Null': 'YES',
+        'Key': '',
+        'Default': None,
+        'Extra': ''},
+        {'Field': 'assigned_technician',
+        'Type': 'varchar(140)',
+        'Null': 'YES',
+        'Key': '',
+        'Default': None,
+        'Extra': ''},
+        {'Field': 'diagnosis_notes',
+        'Type': 'longtext',
+        'Null': 'YES',
+        'Key': '',
+        'Default': None,
+        'Extra': ''},
+        {'Field': 'estimated_cost',
+        'Type': 'decimal(21,9)',
+        'Null': 'NO',
+        'Key': '',
+        'Default': '0.000000000',
+        'Extra': ''},
+        {'Field': 'diagnosis_date',
+        'Type': 'date',
+        'Null': 'YES',
+        'Key': '',
+        'Default': None,
+        'Extra': ''},
+        {'Field': 'priority',
+        'Type': 'varchar(140)',
+        'Null': 'YES',
+        'Key': '',
+        'Default': 'Normal',
+        'Extra': ''},
+        {'Field': 'parts_total',
+        'Type': 'decimal(21,9)',
+        'Null': 'NO',
+        'Key': '',
+        'Default': '0.000000000',
+        'Extra': ''},
+        {'Field': 'labour_charge',
+        'Type': 'decimal(21,9)',
+        'Null': 'NO',
+        'Key': '',
+        'Default': '0.000000000',
+        'Extra': ''},
+        {'Field': 'final_amount',
+        'Type': 'decimal(21,9)',
+        'Null': 'NO',
+        'Key': '',
+        'Default': '0.000000000',
+        'Extra': ''},
+        {'Field': 'payment_status',
+        'Type': 'varchar(140)',
+        'Null': 'YES',
+        'Key': '',
+        'Default': 'Paid',
+        'Extra': ''},
+        {'Field': 'naming_series',
+        'Type': 'varchar(140)',
+        'Null': 'YES',
+        'Key': '',
+        'Default': None,
+        'Extra': ''},
+        {'Field': 'delivery_date',
+        'Type': 'date',
+        'Null': 'YES',
+        'Key': '',
+        'Default': None,
+        'Extra': ''},
+        {'Field': 'remarks',
+        'Type': 'text',
+        'Null': 'YES',
+        'Key': '',
+        'Default': None,
+        'Extra': ''},
+        {'Field': 'status',
+        'Type': 'varchar(140)',
+        'Null': 'YES',
+        'Key': '',
+        'Default': None,
+        'Extra': ''}]
+
+        The 5 column names i recognise are Technician name,parts used,labour charge,total amount,status.
+    
+PART D
+    What are the three numeric values of docstatus and what state does each represent?
+        The three numeric values of doc status are 0,1,2 and the each status represents
+        0-Means the document is in draft state
+        1-Means the document is in submitted state
+        2-Means the document is in cancelled state
+    Can you call doc.save() on a submitted document? What about doc.submit() on a
+    cancelled one? Test in bench console and explain why?
+        No, We cannot call doc.save() for the submitted document because we cannot edit even if we call without any changes it just return docname and its status.
+
+        No, We cannot call doc.submit() for the cancelled document and it shows we cannot edit or submit the cancelled document and where we can amend that document and edit the fields which will stored with suffix number after the cancelled document name.
+    
+    Why would you see a "Document has been modified after you have opened it" error and how does Frappe prevent concurrent overwrites?
+        This means another user is accessed and modified the things after you open so we can refresh or reload to get the latest version
+        Frappe prevents the concurrent overwrites by checking the modified time of document and database modified time if it not matches it throws the error Document has been modified after you have opened it.
+
+PART E
+    Corrected version
+    def validate(self):
+        self.total=sum(r.amount for r in self.items)
+    self.save() 
+    # where if we call the save method inside validate it will cause the infinite loop because the document lifecycle of frappe during every call of save method it call validate function
+
+    def on_submit(self):
+        other=frappe.get_doc("Spare Part",self.part)
+        other.stock_qty-=self.qty
+        other.save()
+        #where if we do the other.stock_qty-=self.qty during the each validation it will decrease the quantity which leads to the wrong data maintainence so we decrease only after the successful submission.
+
+
+Questions of C1
+    When you append a row to Job Card.parts_used and save, what 4 columns does
+    Frappe automatically set on the child table row?
+        When I append the row to the job card in the parts_used the frappe automatically set the 4 columns they are 
+            Parent-Parent of the childtable
+            parent type-Stores the type of the parent
+            parent field-Stored the field name of the childtable in parent
+            idx-It stores the row id
+    What is the DB table name for the Part Usage Entry DocType?
+        The Doctype Part usage entry will be stored with tab prefix as tab Part Usage Entry
+    If you delete row at idx=2 and re-save, what happens to idx values of remaining
+    rows?
+        The frappe will automatically reoreder the idx values once the row id deleted and it always maintains the sequence in order.
+    Rename one of your test Technician records using the Rename Document feature.Then check: does the assigned_technician field on linked Job Cards automaticallyupdate? Why or why not? What does "track changes" mean in this context?
+        Yes the assigned_technician name will be update after the change sonce it is the link datatype which will always be with referential intergrity and the track changes mean where it track the changes in the field that happens in the particular document so we can see the change what happend old->new data
+    Explain unique constraints: what is the difference between setting a field as "unique" in the DocType vs doing a frappe.db.exists() check in validate()?
+        Setting the field as unique will make the changes in db where it will make the column as unique constraint but in db.exists() that check in the validate will not safe where it checks before the save so there is threat to the race condition so the unique method is safer than db.exists() in validate function.
+
+Questions D2
+    What is the issues in using frappe.get_all in a whitelisted method that is exposed to guests or low-privilege users. Explain it in the context of permission_query_conditions?
+        While using the get_all in whitelistted method where it will not check any permissions and even give the data to any user and guests so where the hook function permission_query_conditions will check whetehr user
+
+            
 
 
 

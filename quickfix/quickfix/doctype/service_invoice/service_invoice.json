@@ -11,7 +11,8 @@
   "labour_charge",
   "parts_total",
   "total_amount",
-  "payment_status"
+  "payment_status",
+  "amended_from"
  ],
  "fields": [
   {
@@ -35,17 +36,20 @@
    "label": "Invoice Date"
   },
   {
+   "fetch_from": "job_card.labour_charge",
    "fieldname": "labour_charge",
    "fieldtype": "Currency",
    "label": "Labour Charge"
   },
   {
+   "fetch_from": "job_card.parts_total",
    "fieldname": "parts_total",
    "fieldtype": "Currency",
    "label": "Parts Total",
    "read_only": 1
   },
   {
+   "fetch_from": "job_card.final_amount",
    "fieldname": "total_amount",
    "fieldtype": "Currency",
    "label": "Total Amount",
@@ -57,12 +61,23 @@
    "in_list_view": 1,
    "label": "Payment Status",
    "options": "Unpaid\nPaid"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Service Invoice",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
+ "is_submittable": 1,
  "links": [],
- "modified": "2026-03-31 18:24:18.381649",
+ "modified": "2026-04-03 16:13:14.919979",
  "modified_by": "Administrator",
  "module": "QuickFix",
  "name": "Service Invoice",
@@ -78,6 +93,29 @@
    "report": 1,
    "role": "System Manager",
    "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "QF Service Staff",
+   "share": 1
+  },
+  {
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "QF Manager",
+   "share": 1,
+   "submit": 1,
    "write": 1
   }
  ],
