@@ -370,7 +370,10 @@ Questions D2
     What is the issues in using frappe.get_all in a whitelisted method that is exposed to guests or low-privilege users. Explain it in the context of permission_query_conditions?
         While using the get_all in whitelistted method where it will not check any permissions and even give the data to any user and guests so where the hook function permission_query_conditions will check whetehr user
 
-            
+Questions of E1
+    Call self.save() inside on_update and see to the issues of it and explain them in the same readme_internals. Correct the pattern and explain it.
+        We cannot call self.save() in update where it creates the recursion where after update frappe calls save it also call on_update so if we use save again on_update it creates the infinite recursion so just write the things need in on_update and leave it frappe automatically saves during document lifecycle
+
 
 
 

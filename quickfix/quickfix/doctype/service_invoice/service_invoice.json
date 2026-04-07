@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "INV-.YYYY.-.#####",
  "creation": "2026-03-31 18:16:16.581280",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -12,7 +13,8 @@
   "parts_total",
   "total_amount",
   "payment_status",
-  "amended_from"
+  "amended_from",
+  "naming_series"
  ],
  "fields": [
   {
@@ -71,16 +73,23 @@
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Naming Series"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-04-03 16:13:14.919979",
+ "modified": "2026-04-07 12:05:18.031714",
  "modified_by": "Administrator",
  "module": "QuickFix",
  "name": "Service Invoice",
+ "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [
   {

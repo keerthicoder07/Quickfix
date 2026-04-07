@@ -104,3 +104,15 @@ def get_job_cards_safe():
 			row.pop("customer_phone", None)
 			row.pop("customer_email", None)
 	return data
+
+
+@frappe.whitelist()
+def send_job_ready_email(job_card, user, customer_email):
+	email = frappe.db.get_value("User", user, "email")
+	if not email:
+		return
+	frappe.sendmail(
+		recipients=[email, customer_email],
+		subject=("Your Job is Ready"),
+		message=(f"Your jobcard {job_card} is ready for delivery"),
+	)
