@@ -6,3 +6,7 @@
 
 // 	},
 // });
+
+frappe.realtime.on("job_ready", (data) => {
+	console.log("Job ready:", data);
+});

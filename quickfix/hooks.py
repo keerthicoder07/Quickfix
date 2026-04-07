@@ -253,3 +253,4 @@ fixtures = [
 	{"doctype": "Custom DocPerm"},
 ]
 permission_query_conditions = {"Job Card": "quickfix.api.get_job_card_permission_query_conditions"}
+override_doctype_class = {"Job Card": "quickfix.overrides.custom_job_card.CustomJobCard"}
