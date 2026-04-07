@@ -374,6 +374,44 @@ Questions of E1
     Call self.save() inside on_update and see to the issues of it and explain them in the same readme_internals. Correct the pattern and explain it.
         We cannot call self.save() in update where it creates the recursion where after update frappe calls save it also call on_update so if we use save again on_update it creates the infinite recursion so just write the things need in on_update and leave it frappe automatically saves during document lifecycle
 
+Question of E3
+Part A
+    Write a comment block explaining: what is Method Resolution Order (MRO), and why
+    calling super() is non-negotiable?
+        MRO defines the order in which python looks in a class hireachy when custom job card inherits form job card python Mro decides which validate() to execute
+        and calling super().validate() is non negotiable where it always has somw data and permission checks to maintain integrity
+    
+    Write a comment block explaining: when would you choose override_doctype_class
+    over doc_events?
+        override_doctype_class is used when you want to fully replace or extend the
+    behavior of a DocType by subclassing its Python class. It gives complete control
+    over lifecycle methods (validate, on_submit, on_cancel, etc.) and allows deep
+    customization using inheritance.
+        doc_events, on the other hand, is used to hook into specific events without
+    modifying the original class. It is suitable for lightweight extensions such as
+    triggering additional logic on certain events.
+
+Part B
+    Assume the Frappe core updates Job Card's validate() to add a new check. If you
+    override_doctype_class and forget to update super() - what breaks? Write a test that catches this.
+        When we forget to call the super() methon in validate where it will not check the core validations and when we override it with child class where only the child validation will execute and will not run the super.validation which leads to the data intergrity
+    
+    Explain in README_internals.md: why is doc_events safer than
+    override_doctype_class for most use cases?
+        Where the doc_events is more safer than override because it just work like an add-ons where it will check the core validations without fail but if we forget to call the super in the override class then it leads to the break of data and validations including permission checks so mostly we use the doc_events
+
+Part C
+    In the Spare Part controller, add an on_update method
+    Which of the below pattern would you use and and explain why.
+    doc = frappe.get_doc("QuickFix Settings", "QuickFix Settings")
+    threshold = doc.low_stock_threshold
+    threshold = frappe.db.get_value("QuickFix Settings", None,
+    "low_stock_threshold")
+
+        Here the frappe.db.get_value will perform well since it gets only one value but the get_doc where loads the whole document which slow down the process so the second method is better to use and since it is single doctype we can give the document field as None.
+
+
+
 
 
 
