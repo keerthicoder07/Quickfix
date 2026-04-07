@@ -2,13 +2,14 @@
 # For license information, please see license.txt
 
 import frappe
+from frappe import _
 from frappe.model.document import Document
 
 
 class JobCard(Document):
 	def validate(self):
 		if len(self.customer_phone) != 10:
-			frappe.throw("Invalid Phone Number")
+			frappe.throw(_("Invalid Phone Number"))
 		if not self.labour_charge:
 			self.labour_charge = frappe.db.get_single_value("QuickFix Settings", "default_labour_charge")
 		for items in self.parts_used:
@@ -23,15 +24,15 @@ class JobCard(Document):
 			"For Deleivery",
 		]
 		if self.status in reserved_status and not self.assigned_technician:
-			frappe.throw("You must assign the Technician")
+			frappe.throw(_("You must assign the Technician"))
 
 	def before_submit(self):
 		if self.status != "For Delivery":
-			frappe.throw("You can submit only during the Delivery")
+			frappe.throw(_("You can submit only during the Delivery"))
 		for item in self.parts_used:
 			qty = frappe.db.get_value("Spare Part", {item.part_name == "part_name"}, "stock_qty")
 			if item.quantity > qty:
-				frappe.throw("Stock is not available")
+				frappe.throw(_("Stock is not available"))
 
 	def on_submit(self):
 		for item in self.parts_used:
@@ -75,4 +76,4 @@ class JobCard(Document):
 
 	def on_trash(self):
 		if self.status != "Cancelled" and self.status != "Draft":
-			frappe.throw("Cannot delete the job in progress")
+			frappe.throw(_("Cannot delete the job in progress"))

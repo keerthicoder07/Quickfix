@@ -107,7 +107,7 @@ def get_job_cards_safe():
 
 
 @frappe.whitelist()
-def send_job_ready_email(job_card, user, customer_email):
+def send_job_ready_email(job_card: str, user: str, customer_email: str) -> None:
 	email = frappe.db.get_value("User", user, "email")
 	if not email:
 		return
@@ -119,11 +119,11 @@ def send_job_ready_email(job_card, user, customer_email):
 
 
 @frappe.whitelist()
-def rename_technician(old_name, new_name):
+def rename_technician(old_name: str, new_name: str) -> None:
 	if not frappe.db.exists("Technician", old_name):
-		frappe.throw("Old Technician not found")
+		frappe.throw(_("Old Technician not found"))
 	if frappe.db.exists("Technician", new_name):
-		frappe.throw("New Technician already exists")
+		frappe.throw(_("New Technician already exists"))
 	frappe.rename_doc(
 		"Technician", old_name, new_name, merge=False
 	)  # When we give merge=True then whetehr there is document with the new name where that data will be overwite in the old name document so the data will loss
