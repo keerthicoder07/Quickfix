@@ -433,6 +433,11 @@ Questions of F3
     Build cache-busting: explain what bench build --app quickfix does and why assets
     need cache-busting after JS changes
         After the changes in the js and css should be rebuild again in the application to show the new updated ui where the command bench build --app will create the new version of bundles files which is hashed file and where the assests need the cache busting after js changes to show the new and updated ui instead of showing older version
+    
+    Explain: what is the difference between a Jinja context available in Print Formats vs one available in Web Pages? Are they the same?
+        The printable format is particularly for the document where we can use it to generate the pdf and print as our wish format like sales invoice scenario etc
+        but the web pages are used to display the dynamic data and to create the website pages to render with dynamic data
+
 
 
 
