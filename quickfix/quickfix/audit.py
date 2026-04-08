@@ -3,7 +3,10 @@ from frappe.utils import now
 
 
 def log_change(doc, method):
-	if doc.doctype == "Audit Log":
+	if doc.doctype == "Audit Log":  # module doctype
+		return
+	meta = frappe.get_meta(doc.doctype)
+	if meta.module != "QuickFix":
 		return
 	frappe.get_doc(
 		{
@@ -14,4 +17,4 @@ def log_change(doc, method):
 			"user": frappe.session.user,
 			"timestamp": now(),
 		}
-	).insert(ignore_permission=True)
+	).insert(ignore_permissions=True)

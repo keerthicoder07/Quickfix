@@ -1,6 +1,6 @@
 import frappe
 
-from quickfix.doctype.job_card.job_card import JobCard
+from quickfix.quickfix.doctype.job_card.job_card import JobCard
 
 
 class CustomJobCard(JobCard):
