@@ -410,6 +410,14 @@ Part C
 
         Here the frappe.db.get_value will perform well since it gets only one value but the get_doc where loads the whole document which slow down the process so the second method is better to use and since it is single doctype we can give the document field as None.
 
+Questions of F1
+    Register TWO validate handlers on Job Card - one in your main controller and one in doc_events. In README_internals.md: in what order do they run? What happens if both raise a frappe.ValidationError?
+        In this scenario first the the controller validation will execute first and then doc_event hook will execute then and when the controller validation fails the doc_events will not execute and even if it pass and fails during the doc_event the it will not save that document and there is no chance to raise the error by both validations at same time so anyone can raise error where there it self execution will stop.
+    
+    Demonstrate: what happens when you register "*" AND a specific DocType handler
+    for the same event? Do both run?
+        Yes the both events also will execute and first the specific Dcotype handler will execute and the wildcard handlers will execute if any one of the handler throws the validation error then other handlers will not execute
+
 
 
 

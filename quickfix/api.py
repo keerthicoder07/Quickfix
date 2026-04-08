@@ -4,7 +4,7 @@ from typing import Optional
 import frappe
 from frappe import _
 from frappe.query_builder import DocType
-from frappe.utils import now_datetime
+from frappe.utils import now, now_datetime
 
 
 @frappe.whitelist

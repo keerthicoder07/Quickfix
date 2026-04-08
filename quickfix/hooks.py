@@ -254,3 +254,11 @@ fixtures = [
 ]
 permission_query_conditions = {"Job Card": "quickfix.api.get_job_card_permission_query_conditions"}
 override_doctype_class = {"Job Card": "quickfix.overrides.custom_job_card.CustomJobCard"}
+doc_events = {
+	"*": {
+		"on_update": "quickfix.audit.log_change",
+		"on_submit": "quickfix.audit.log_change",
+		"on_cancel": "quickfix.audit.log_change",
+	},
+	"Job Card": {"validate": "quickfix.utils.validate_job_card"},
+}
