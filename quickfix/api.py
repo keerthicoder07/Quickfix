@@ -131,7 +131,12 @@ def rename_technician(old_name: str, new_name: str) -> None:
 
 
 @frappe.whitelist()
-def custom_get_count(doctype, filters=None, debug=False, cache=False):
+def custom_get_count(
+	doctype: str,
+	filters: dict | list | None = None,
+	debug: bool = False,
+	cache: bool = False,
+) -> str:
 	# print("Override called")
 	frappe.get_doc(
 		{
