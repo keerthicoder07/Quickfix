@@ -3,6 +3,7 @@ from typing import Optional
 
 import frappe
 from frappe import _
+from frappe.client import get_count
 from frappe.query_builder import DocType
 from frappe.utils import now, now_datetime
 
@@ -127,3 +128,18 @@ def rename_technician(old_name: str, new_name: str) -> None:
 	frappe.rename_doc(
 		"Technician", old_name, new_name, merge=False
 	)  # When we give merge=True then whetehr there is document with the new name where that data will be overwite in the old name document so the data will loss
+
+
+@frappe.whitelist()
+def custom_get_count(doctype, filters=None, debug=False, cache=False):
+	# print("Override called")
+	frappe.get_doc(
+		{
+			"doctype": "Audit Log",
+			"doctype_name": doctype,
+			"action": "count_queried",
+			"user": frappe.session.user,
+		}
+	).insert(ignore_permissions=True)
+	count = get_count(doctype, filters, debug, cache)
+	return f"Total_count={count}"
