@@ -449,6 +449,16 @@ Questions of F4
     as the original and in what case would you get a TypeError.
         The signature mismatch occurs when the custom function not matches the same arguments and default of original fucntion and the type error occurs when the value is sent with mismatch datatype that not expected by that function so we should give the argument values correctly as per the paramater
     
+Questions of F5
+    Explain fieldname collision risk: what happens if your Custom Field has the same fieldname as a field added by a future Frappe update?
+        Fieldname collision occurs when a custom field uses the same fieldname as a
+        field introduced later by Frappe or another app. Since fieldnames map directly
+        to database columns, this leads to conflicts during migrations, causing errors
+        such as duplicate column exceptions. To avoid this, custom fields should use
+        unique prefixes (e.g., qf_) to ensure namespace isolation and future compatibility.
+    Explain patching order: if Patch 1 creates a Custom Field and Patch 2 reads it, why must they be separate entries in patches.txt and never merged?
+        Patches in Frappe are executed sequentially as listed in patches.txt. Each patch should perform a single, well-defined operation. If one patch depends on another (e.g., creating a Custom Field and then using it), they must be defined as separate entries. This is because schema changes may not be immediately available within the same execution context, and combining dependent operations in a single patch can lead to failures. Maintaining separate patches ensures proper execution order, dependency management, and migration stability.
+    
     
 
 
