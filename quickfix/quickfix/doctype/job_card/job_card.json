@@ -4,6 +4,7 @@
  "autoname": "JC-.YYYY.-.#####",
  "creation": "2026-03-31 15:45:29.013239",
  "doctype": "DocType",
+ "document_type": "Document",
  "engine": "InnoDB",
  "field_order": [
   "section_break_s3t8",
@@ -220,7 +221,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-04-03 16:10:27.374726",
+ "modified": "2026-04-09 16:40:54.595302",
  "modified_by": "Administrator",
  "module": "QuickFix",
  "name": "Job Card",
