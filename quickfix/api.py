@@ -147,6 +147,6 @@ def custom_get_count(
 			"timestamp": now(),
 		}
 	).insert(ignore_permissions=True)
-	frappe.db.commit()
+	# frappe.db.commit()
 	count = get_count(doctype, filters, debug, cache)
 	return f"Total_count={count}"
