@@ -410,6 +410,33 @@ Part C
 
         Here the frappe.db.get_value will perform well since it gets only one value but the get_doc where loads the whole document which slow down the process so the second method is better to use and since it is single doctype we can give the document field as None.
 
+Questions of F1
+    Register TWO validate handlers on Job Card - one in your main controller and one in doc_events. In README_internals.md: in what order do they run? What happens if both raise a frappe.ValidationError?
+        In this scenario first the the controller validation will execute first and then doc_event hook will execute then and when the controller validation fails the doc_events will not execute and even if it pass and fails during the doc_event the it will not save that document and there is no chance to raise the error by both validations at same time so anyone can raise error where there it self execution will stop.
+    
+    Demonstrate: what happens when you register "*" AND a specific DocType handler
+    for the same event? Do both run?
+        Yes the both events also will execute and first the specific Dcotype handler will execute and the wildcard handlers will execute if any one of the handler throws the validation error then other handlers will not execute
+
+Questions of F3
+    app_include_js: a JS file loaded only for logged-in desk users
+    web_include_js: a JS file loaded only for website/portal pages
+    Explain in README_internals.md: what is the difference? When would you use
+    each?
+        Here the app_include_js will be hook only to the desk users and also visible only when user is logged in without login it will not visilble to the user
+        For the website js hook which is like the public page where any user can see that page and visible to all users for example like landing page of website.
+    
+    doctype_js for Job Card, doctype_list_js for Job Card
+    doctype_tree_js: not applicable here - explain in README what DocType would use
+    a tree view and why
+        The job card doctype is not a tree doctype where the tree structure has hierarchial so it is not applicable but where doctype_js and list view can be applicable since it is not single type doctype so we can have the list of documents
+    Build cache-busting: explain what bench build --app quickfix does and why assets
+    need cache-busting after JS changes
+        After the changes in the js and css should be rebuild again in the application to show the new updated ui where the command bench build --app will create the new version of bundles files which is hashed file and where the assests need the cache busting after js changes to show the new and updated ui instead of showing older version
+    
+    Explain: what is the difference between a Jinja context available in Print Formats vs one available in Web Pages? Are they the same?
+        The printable format is particularly for the document where we can use it to generate the pdf and print as our wish format like sales invoice scenario etc
+        but the web pages are used to display the dynamic data and to create the website pages to render with dynamic data
 
 
 
