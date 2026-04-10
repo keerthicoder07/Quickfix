@@ -24,7 +24,7 @@ def get_overdue_jobs():
 @frappe.whitelist()
 def transfer_job(from_tech: str, to_tech: str) -> None:
 	if from_tech == to_tech:
-		frappe.throw("Can't set already assigned technician")
+		frappe.throw(_("Can't set already assigned technician"))
 	try:
 		frappe.db.sql(
 			"""

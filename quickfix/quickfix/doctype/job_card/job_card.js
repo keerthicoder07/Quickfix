@@ -18,9 +18,9 @@ frappe.ui.form.on("Job Card", {
 		});
 	},
 	refresh: function (frm) {
-		frm.add_custom_button("Reject Job", function () {
+		frm.add_custom_button(__("Reject Job"), function () {
 			let d = new frappe.ui.Dialog({
-				title: "Reject Job",
+				title: __("Reject Job"),
 				fields: [
 					{
 						label: "Rejection Reason",
@@ -29,7 +29,7 @@ frappe.ui.form.on("Job Card", {
 						reqd: 1,
 					},
 				],
-				primary_action_label: "Submit",
+				primary_action_label: __("Submit"),
 				primary_action(values) {
 					frappe.msgprint("Rejected: " + values.reason);
 					d.hide();
@@ -37,11 +37,11 @@ frappe.ui.form.on("Job Card", {
 			});
 			d.show();
 		}),
-			frm.add_custom_button("Transfer Technician", function () {
+			frm.add_custom_button(__("Transfer Technician"), function () {
 				frappe.prompt(
 					[
 						{
-							label: "New Technician",
+							label: __("New Technician"),
 							fieldname: "technician",
 							fieldtype: "Link",
 							options: "Technician",
