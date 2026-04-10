@@ -458,6 +458,19 @@ Questions of F5
         unique prefixes (e.g., qf_) to ensure namespace isolation and future compatibility.
     Explain patching order: if Patch 1 creates a Custom Field and Patch 2 reads it, why must they be separate entries in patches.txt and never merged?
         Patches in Frappe are executed sequentially as listed in patches.txt. Each patch should perform a single, well-defined operation. If one patch depends on another (e.g., creating a Custom Field and then using it), they must be defined as separate entries. This is because schema changes may not be immediately available within the same execution context, and combining dependent operations in a single patch can lead to failures. Maintaining separate patches ensures proper execution order, dependency management, and migration stability.
+
+Questions of G1
+    What is the _qf_patched guard for? What breaks without it?
+        The _qf_patched is used in the monkey patching to avoid the double or multiple patching by wrapping the same functionality again and again and without the guard it leads to the break down of execution,infinite run etc and it is hard ot debug also so the qf_patch guards that.
+    
+    Why is isolating patches in monkey_patches.py better than scattering them in
+    __init__.py?
+        When we keep the monkey patches it will be hidden and during every import or loading it will silently pathces and hard to debug so we use the separate monkey_patches.py which can be control and can maintain all the patches in the single file and easy to debug
+    
+    What is the correct escalation path: try doc_events first - then
+    override_doctype_class - then override_whitelisted_methods - then monkey patch.Why is this the order?
+        The correct escalation to first try the doc_events which can be easily implemented and safer method to handle next the override the doctype which give the full control of the doctype and prevetns the logic even during the update of core doctype and the third is some what risky sice it is external as whitelisted methods and last one is dangerous where it can breakdown the app so we mostly not use this monkey patch.so we ensures the safer->dangerous order.
+    
     
     
 
