@@ -470,6 +470,16 @@ Questions of G1
     What is the correct escalation path: try doc_events first - then
     override_doctype_class - then override_whitelisted_methods - then monkey patch.Why is this the order?
         The correct escalation to first try the doc_events which can be easily implemented and safer method to handle next the override the doctype which give the full control of the doctype and prevetns the logic even during the update of core doctype and the third is some what risky sice it is external as whitelisted methods and last one is dangerous where it can breakdown the app so we mostly not use this monkey patch.so we ensures the safer->dangerous order.
+
+Questions of H4
+    when would a consultant use Client Script DocType vs an app developer use shipped JS? What are the risks of Client Script DocType in production?
+        The consultant use the client script only during the sudden feature to be added as per client's priority and where we cannot do version control on it and it can break anytime and can also overriden accidentally but shipped js code will be save in the code and where we can test it and can modify it and maintain version control.
+    
+    Demonstrate the hiding fields vs permission security pitfall: add a JS field hide that hides customer_phone for non-managers - then show that an API call can still retrieve the field. Explain why hiding in JS is not a security measure.
+        The hide fields will just will not show the details in the UI but they can still take form the api calls and cans till retrive the data from that field so we should write the permission conditions in the backend for real security
+    
+
+
     
     
     

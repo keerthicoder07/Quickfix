@@ -46,6 +46,14 @@ frappe.ui.form.on("Job Card", {
 							fieldtype: "Link",
 							options: "Technician",
 							reqd: 1,
+							get_query: function () {
+								return {
+									filters: {
+										status: "Active",
+										specialization: frm.doc.device_type,
+									},
+								};
+							},
 						},
 					],
 					function (values) {
