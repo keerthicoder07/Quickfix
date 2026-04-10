@@ -477,6 +477,42 @@ Questions of H4
     
     Demonstrate the hiding fields vs permission security pitfall: add a JS field hide that hides customer_phone for non-managers - then show that an API call can still retrieve the field. Explain why hiding in JS is not a security measure.
         The hide fields will just will not show the details in the UI but they can still take form the api calls and cans till retrive the data from that field so we should write the permission conditions in the backend for real security
+
+Questions of I1
+    Demonstrate and explain the issues and solutions with respect to f-string SQL and the parameterized pattern.
+        When we use the f -string in sql query ther is the threat for sql injection and also if we use single quotes in that variable where it shows error so we use the parameterized pattern which can be safe and take as data not as sql command 
+    
+    Add a EXPLAIN statement in bench console for your query - screenshot the result
+    and identify if an index is being used on the status column
+        Out[1]: 
+        [{'id': 1,
+        'select_type': 'SIMPLE',
+        'table': 'tabJob Card',
+        'type': 'ALL',
+        'possible_keys': None,
+        'key': None,
+        'key_len': None,
+        'ref': None,
+        'rows': '2',
+        'Extra': 'Using where'}]
+        So here the index not used where the db scans all the record so if we use index it will be fast and gets the data faster by using index
+    Add a proper index on Job Card.status by modifying the DocType JSON to include
+    search_index: 1 on the status field
+        Out[1]: 
+        [{'id': 1,
+        'select_type': 'SIMPLE',
+        'table': 'tabJob Card',
+        'type': 'range',
+        'possible_keys': 'status_index',
+        'key': 'status_index',
+        'key_len': '563',
+        'ref': None,
+        'rows': '2',
+        'Extra': 'Using index condition'}]
+        so where in this we use the index it will speed up the process and search using the index not with where .
+
+
+
     
 
 

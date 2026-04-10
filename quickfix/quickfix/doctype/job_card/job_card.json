@@ -112,9 +112,13 @@
    "label": "Assignment and Diagnosis"
   },
   {
+   "allow_in_quick_entry": 1,
    "allow_on_submit": 1,
    "fieldname": "assigned_technician",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_preview": 1,
+   "in_standard_filter": 1,
    "label": "Assigned Technician",
    "options": "Technician"
   },
@@ -208,7 +212,8 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Status",
-   "options": "Draft\nPending Diagnosis\nAwaiting Customer Approval\nIn Repair\nReady\nFor Delivery\nDelivered\nCancelled"
+   "options": "Draft\nPending Diagnosis\nAwaiting Customer Approval\nIn Repair\nReady\nFor Delivery\nDelivered\nCancelled",
+   "search_index": 1
   },
   {
    "fieldname": "settings",
@@ -222,7 +227,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-04-10 12:53:36.994014",
+ "modified": "2026-04-10 17:47:15.063618",
  "modified_by": "Administrator",
  "module": "QuickFix",
  "name": "Job Card",
@@ -281,8 +286,10 @@
    "write": 1
   }
  ],
+ "quick_entry": 1,
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
+ "show_preview_popup": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []
