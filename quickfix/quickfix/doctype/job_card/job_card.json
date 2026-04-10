@@ -112,6 +112,7 @@
    "label": "Assignment and Diagnosis"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "assigned_technician",
    "fieldtype": "Link",
    "label": "Assigned Technician",
@@ -221,7 +222,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-04-09 16:40:54.595302",
+ "modified": "2026-04-10 12:53:36.994014",
  "modified_by": "Administrator",
  "module": "QuickFix",
  "name": "Job Card",
