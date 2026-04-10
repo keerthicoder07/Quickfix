@@ -137,14 +137,16 @@ def custom_get_count(
 	debug: bool = False,
 	cache: bool = False,
 ) -> str:
-	# print("Override called")
+	print("Override called")
 	frappe.get_doc(
 		{
 			"doctype": "Audit Log",
 			"doctype_name": doctype,
 			"action": "count_queried",
 			"user": frappe.session.user,
+			"timestamp": now(),
 		}
 	).insert(ignore_permissions=True)
+	# frappe.db.commit()
 	count = get_count(doctype, filters, debug, cache)
 	return f"Total_count={count}"

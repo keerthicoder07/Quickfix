@@ -1,14 +1,5 @@
 [
  {
-  "average_repair_hours": 1,
-  "description": "A Small gadget use by the customer",
-  "device_type": "Smartphone",
-  "docstatus": 0,
-  "doctype": "Device Type",
-  "modified": "2026-03-31 13:16:56.701457",
-  "name": "Smartphone"
- },
- {
   "average_repair_hours": 0,
   "description": null,
   "device_type": "Laptop",
@@ -16,5 +7,14 @@
   "doctype": "Device Type",
   "modified": "2026-03-31 13:17:09.541774",
   "name": "Laptop"
+ },
+ {
+  "average_repair_hours": 1,
+  "description": "A Small gadget use by the customer",
+  "device_type": "Smartphone",
+  "docstatus": 0,
+  "doctype": "Device Type",
+  "modified": "2026-03-31 13:16:56.701457",
+  "name": "Smartphone"
  }
 ]

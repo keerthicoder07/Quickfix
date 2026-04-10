@@ -438,6 +438,30 @@ Questions of F3
         The printable format is particularly for the document where we can use it to generate the pdf and print as our wish format like sales invoice scenario etc
         but the web pages are used to display the dynamic data and to create the website pages to render with dynamic data
 
+Questions of F4
+    explain the difference between override_whitelisted_methods (hook-based, reversible, explicit) vs monkey patching (import-time, brittle, invisible). When would you use each?
+        The override_whitelisted_methods are mostly used in the production where it just override the methods and we can override using the hook but monkey patching will just silentely uses the memory refernce of original during the runtime and which is unstable for the production and can only use for debugging and quick testing
+    
+    What happens if TWO apps both register override_whitelisted_methods for the same method? Write the answer.
+        If two apps register override the last app's registered method only works because it only recently loaded and the first loaded and registered uses the original fucntion not the override method so the last app's override function will works.
+    
+    Explain about the Signature mismatch and not having exactly the same arguments
+    as the original and in what case would you get a TypeError.
+        The signature mismatch occurs when the custom function not matches the same arguments and default of original fucntion and the type error occurs when the value is sent with mismatch datatype that not expected by that function so we should give the argument values correctly as per the paramater
+    
+Questions of F5
+    Explain fieldname collision risk: what happens if your Custom Field has the same fieldname as a field added by a future Frappe update?
+        Fieldname collision occurs when a custom field uses the same fieldname as a
+        field introduced later by Frappe or another app. Since fieldnames map directly
+        to database columns, this leads to conflicts during migrations, causing errors
+        such as duplicate column exceptions. To avoid this, custom fields should use
+        unique prefixes (e.g., qf_) to ensure namespace isolation and future compatibility.
+    Explain patching order: if Patch 1 creates a Custom Field and Patch 2 reads it, why must they be separate entries in patches.txt and never merged?
+        Patches in Frappe are executed sequentially as listed in patches.txt. Each patch should perform a single, well-defined operation. If one patch depends on another (e.g., creating a Custom Field and then using it), they must be defined as separate entries. This is because schema changes may not be immediately available within the same execution context, and combining dependent operations in a single patch can lead to failures. Maintaining separate patches ensures proper execution order, dependency management, and migration stability.
+    
+    
+
+
 
 
 
