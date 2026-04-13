@@ -1,6 +1,7 @@
 # Copyright (c) 2026, Aerele and contributors
 # For license information, please see license.txt
 import frappe
+from frappe import _
 from frappe.utils import date_diff, getdate
 
 
@@ -14,12 +15,12 @@ def execute(filters=None):
 
 def get_columns(filters):
 	cols = [
-		{"label": "Technician", "fieldname": "technician", "fieldtype": "Link", "options": "Technician"},
-		{"label": "Total Jobs", "fieldname": "total_jobs", "fieldtype": "Int"},
-		{"label": "Completed", "fieldname": "completed", "fieldtype": "Int"},
-		{"label": "Avg Turnaround Days", "fieldname": "avg_turnaround_days", "fieldtype": "Int"},
-		{"label": "Revenue", "fieldname": "revenue", "fieldtype": "currency"},
-		{"label": "Completion Rate", "fieldname": "completion_rate", "fieldtype": "percent"},
+		{"label": _("Technician"), "fieldname": "technician", "fieldtype": "Link", "options": "Technician"},
+		{"label": _("Total Jobs"), "fieldname": "total_jobs", "fieldtype": "Int"},
+		{"label": _("Completed"), "fieldname": "completed", "fieldtype": "Int"},
+		{"label": _("Avg Turnaround Days"), "fieldname": "avg_turnaround_days", "fieldtype": "Int"},
+		{"label": _("Revenue"), "fieldname": "revenue", "fieldtype": "Currency"},
+		{"label": _("Completion Rate"), "fieldname": "completion_rate", "fieldtype": "Percent"},
 	]
 	for dt in frappe.get_all("Device Type", fields=["name"]):
 		cols.append(
@@ -110,9 +111,9 @@ def get_summary(data):
 	total_revenue = sum(d["revenue"] for d in data)
 	best = max(data, key=lambda x: x["completion_rate"], default=None)
 	return [
-		{"label": "Total Jobs", "value": total_jobs, "indicator": "Blue"},
-		{"label": "Total Revenue", "value": total_revenue, "indicator": "Green"},
-		{"label": "Best Technician", "value": best["technician"] if best else "-", "indicator": "Orange"},
+		{"label": _("Total Jobs"), "value": total_jobs, "indicator": "Blue"},
+		{"label": _("Total Revenue"), "value": total_revenue, "indicator": "Green"},
+		{"label": _("Best Technician"), "value": best["technician"] if best else "-", "indicator": "Orange"},
 	]
 
 

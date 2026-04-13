@@ -163,7 +163,7 @@ def get_shop_name():
 
 
 @frappe.whitelist()
-def get_qr_code(name):
+def get_qr_code(name: str) -> str:
 	url = f"/app/job-card/{name}"
 	qr = qrcode.make(url)
 	buffer = BytesIO()
