@@ -8,7 +8,7 @@ import qrcode
 from frappe import _
 from frappe.client import get_count
 from frappe.query_builder import DocType
-from frappe.utils import now, now_datetime
+from frappe.utils import now, now_datetime, nowdate
 
 
 @frappe.whitelist
@@ -170,3 +170,28 @@ def get_qr_code(name):
 	qr.save(buffer, format="PNG")
 	encoded = base64.b64encode(buffer.getvalue()).decode()
 	return f"data:image/png;base64,{encoded}"
+
+
+@frappe.whitelist()
+def generate_monthly_revenue_report():
+	try:
+		from_date = frappe.utils.month_start(nowdate())
+		to_date = frappe.utils.month_end(nowdate())
+
+		jobs = frappe.get_all(
+			"Job Card",
+			filters={"status": "Delivered", "completion_date": ["between", [from_date, to_date]]},
+			fields=["name", "estimated_cost"],
+		)
+
+		total_revenue = sum(j.estimated_cost or 0 for j in jobs)
+
+		frappe.logger().info(f"Monthly Revenue ({from_date} to {to_date}): {total_revenue}")
+
+		print("Successfully Executed")  # ✅ fixed indentation
+
+		return {"status": "success", "total_revenue": total_revenue, "count": len(jobs)}
+
+	except Exception:
+		frappe.log_error(title="Monthly Revenue Report Failed", message=frappe.get_traceback())
+		raise

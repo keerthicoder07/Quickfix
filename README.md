@@ -517,6 +517,15 @@ Questions of J1
     Pre-compute in before_print() and attach to self, then reference in template as
     doc.precomputed_field.
         yes it is better instead of we add in the jinja template because we can maintain all the logic in one end in server side so we dont want to switch to places to edit or check the logics and it is the easy way to work.
+
+Questions of K1
+    In README_internals.md: explain the 3 queue names (default, long, short) and when
+    to use each
+        Default-Which done the tasks which are with medium and normal mode where all the hooks and other default background jobs are run as default
+
+        short-Which gives the high priority jobs like sending email and notifications where we can schedule these jobs using enqueue 
+
+        long-Which can schedule using the enqueue which run the heavy load processes and can give the timeout to terminate to avoid running so long time without running other jobs
     
 
 

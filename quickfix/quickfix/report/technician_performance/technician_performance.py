@@ -114,3 +114,7 @@ def get_summary(data):
 		{"label": "Total Revenue", "value": total_revenue, "indicator": "Green"},
 		{"label": "Best Technician", "value": best["technician"] if best else "-", "indicator": "Orange"},
 	]
+
+
+def monthly_performance():
+	frappe.enqueue("quickfix.api.generate_monthly_revenue_report", queue="long", timeout=600)

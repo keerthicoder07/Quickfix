@@ -58,7 +58,7 @@ class JobCard(Document):
 		frappe.publish_realtime("job_ready", {"job_card": self.name, "status": self.status}, user=self.owner)
 		frappe.enqueue(
 			"quickfix.api.send_job_ready_email",
-			queue="default",
+			queue="short",
 			job_card=self.name,
 			user=self.owner,
 			customer_email=self.customer_email,
