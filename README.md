@@ -511,6 +511,14 @@ Questions of I1
         'Extra': 'Using index condition'}]
         so where in this we use the index it will speed up the process and search using the index not with where .
 
+Questions of J1
+    Putting a frappe.get_all() call inside the Jinja template directly?
+        Initially it slow down the process because in each render it runs the db commands and also where the get_all will ignore all the permissions so any one can access the data without any permission conditions and it is hard to debug where it raises the wsgi error
+    Pre-compute in before_print() and attach to self, then reference in template as
+    doc.precomputed_field.
+        yes it is better instead of we add in the jinja template because we can maintain all the logic in one end in server side so we dont want to switch to places to edit or check the logics and it is the easy way to work.
+    
+
 
 
     

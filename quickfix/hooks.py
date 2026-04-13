@@ -267,7 +267,10 @@ doc_events = {
 	"Job Card": {"validate": "quickfix.utils.validate_job_card"},
 }
 
-jinja = {"methods": ["quickfix.utils.get_shop_name"], "filters": ["quickfix.utils.format_job_id"]}
+jinja = {
+	"methods": ["quickfix.api.get_shop_name", "quickfix.api.get_qr_code"],
+	"filters": ["quickfix.utils.format_job_id"],
+}
 website_route_rules = [{"from_route": "/track-job", "to_route": "track-job"}]
 
 portal_menu_items = [{"title": "Track My Job", "route": "/track-job", "role": "Guest"}]

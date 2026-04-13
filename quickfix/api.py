@@ -1,7 +1,10 @@
+import base64
 from datetime import timedelta
+from io import BytesIO
 from typing import Optional
 
 import frappe
+import qrcode
 from frappe import _
 from frappe.client import get_count
 from frappe.query_builder import DocType
@@ -152,3 +155,18 @@ def custom_get_count(
 	# frappe.db.commit()
 	count = get_count(doctype, filters, debug, cache)
 	return f"Total_count={count}"
+
+
+@frappe.whitelist()
+def get_shop_name():
+	return frappe.db.get_single_value("Quickfix Settings", "shop_name")
+
+
+@frappe.whitelist()
+def get_qr_code(name):
+	url = f"/app/job-card/{name}"
+	qr = qrcode.make(url)
+	buffer = BytesIO()
+	qr.save(buffer, format="PNG")
+	encoded = base64.b64encode(buffer.getvalue()).decode()
+	return f"data:image/png;base64,{encoded}"

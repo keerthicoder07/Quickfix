@@ -7,8 +7,8 @@ def validate_job_card(doc, method):
 		frappe.throw(_("Assign technician (doc_events)"))
 
 
-def get_shop_name():
-	return frappe.db.get_single_value("QuickFix Settings", "shop_name")
+# def get_shop_name():
+# 	return frappe.db.get_single_value("QuickFix Settings", "shop_name")
 
 
 def format_job_id(value):
