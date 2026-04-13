@@ -458,6 +458,65 @@ Questions of F5
         unique prefixes (e.g., qf_) to ensure namespace isolation and future compatibility.
     Explain patching order: if Patch 1 creates a Custom Field and Patch 2 reads it, why must they be separate entries in patches.txt and never merged?
         Patches in Frappe are executed sequentially as listed in patches.txt. Each patch should perform a single, well-defined operation. If one patch depends on another (e.g., creating a Custom Field and then using it), they must be defined as separate entries. This is because schema changes may not be immediately available within the same execution context, and combining dependent operations in a single patch can lead to failures. Maintaining separate patches ensures proper execution order, dependency management, and migration stability.
+
+Questions of G1
+    What is the _qf_patched guard for? What breaks without it?
+        The _qf_patched is used in the monkey patching to avoid the double or multiple patching by wrapping the same functionality again and again and without the guard it leads to the break down of execution,infinite run etc and it is hard ot debug also so the qf_patch guards that.
+    
+    Why is isolating patches in monkey_patches.py better than scattering them in
+    __init__.py?
+        When we keep the monkey patches it will be hidden and during every import or loading it will silently pathces and hard to debug so we use the separate monkey_patches.py which can be control and can maintain all the patches in the single file and easy to debug
+    
+    What is the correct escalation path: try doc_events first - then
+    override_doctype_class - then override_whitelisted_methods - then monkey patch.Why is this the order?
+        The correct escalation to first try the doc_events which can be easily implemented and safer method to handle next the override the doctype which give the full control of the doctype and prevetns the logic even during the update of core doctype and the third is some what risky sice it is external as whitelisted methods and last one is dangerous where it can breakdown the app so we mostly not use this monkey patch.so we ensures the safer->dangerous order.
+
+Questions of H4
+    when would a consultant use Client Script DocType vs an app developer use shipped JS? What are the risks of Client Script DocType in production?
+        The consultant use the client script only during the sudden feature to be added as per client's priority and where we cannot do version control on it and it can break anytime and can also overriden accidentally but shipped js code will be save in the code and where we can test it and can modify it and maintain version control.
+    
+    Demonstrate the hiding fields vs permission security pitfall: add a JS field hide that hides customer_phone for non-managers - then show that an API call can still retrieve the field. Explain why hiding in JS is not a security measure.
+        The hide fields will just will not show the details in the UI but they can still take form the api calls and cans till retrive the data from that field so we should write the permission conditions in the backend for real security
+
+Questions of I1
+    Demonstrate and explain the issues and solutions with respect to f-string SQL and the parameterized pattern.
+        When we use the f -string in sql query ther is the threat for sql injection and also if we use single quotes in that variable where it shows error so we use the parameterized pattern which can be safe and take as data not as sql command 
+    
+    Add a EXPLAIN statement in bench console for your query - screenshot the result
+    and identify if an index is being used on the status column
+        Out[1]: 
+        [{'id': 1,
+        'select_type': 'SIMPLE',
+        'table': 'tabJob Card',
+        'type': 'ALL',
+        'possible_keys': None,
+        'key': None,
+        'key_len': None,
+        'ref': None,
+        'rows': '2',
+        'Extra': 'Using where'}]
+        So here the index not used where the db scans all the record so if we use index it will be fast and gets the data faster by using index
+    Add a proper index on Job Card.status by modifying the DocType JSON to include
+    search_index: 1 on the status field
+        Out[1]: 
+        [{'id': 1,
+        'select_type': 'SIMPLE',
+        'table': 'tabJob Card',
+        'type': 'range',
+        'possible_keys': 'status_index',
+        'key': 'status_index',
+        'key_len': '563',
+        'ref': None,
+        'rows': '2',
+        'Extra': 'Using index condition'}]
+        so where in this we use the index it will speed up the process and search using the index not with where .
+
+
+
+    
+
+
+    
     
     
 
