@@ -58,7 +58,7 @@ class JobCard(Document):
 		frappe.publish_realtime("job_ready", {"job_card": self.name, "status": self.status}, user=self.owner)
 		frappe.enqueue(
 			"quickfix.api.send_job_ready_email",
-			queue="default",
+			queue="short",
 			job_card=self.name,
 			user=self.owner,
 			customer_email=self.customer_email,
@@ -77,3 +77,6 @@ class JobCard(Document):
 	def on_trash(self):
 		if self.status != "Cancelled" and self.status != "Draft":
 			frappe.throw(_("Cannot delete the job in progress"))
+
+	def before_print(self, print_settings=None):
+		self.print_summary = f"{self.customer_name}-{self.device_brand} {self.device_model}"
