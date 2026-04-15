@@ -529,8 +529,106 @@ Questions of K1
     
     Explain retry behavior: how many times does Frappe retry a failed background job by default?
         Frappe will not retry the background jobs by default where user should manually retry that and also where if it can retry defaulty there is a cause of infinite loop so where we can avoid the multiple retry using Idempotency and which is safer too.
+
+
+Output of L1
+    cookies for session
+    http://quickfix-dev.localhost:8000/api/method/login
+        sid
+        71e2351254003176fbdfcfa2cd7cba8d7f5fdf02294b44d699195da0
+        quickfix-dev.localhost
+        /
+        Wed, 22 Apr 2026 11:07:19 GMT
+        true
+        false
+        system_user
+        yes
+        quickfix-dev.localhost
+        /
+        Session
+        false
+        false
+        full_name
+        Administrator
+        quickfix-dev.localhost
+        /
+        Session
+        false
+        false
+        user_id
+        Administrator
+        quickfix-dev.localhost
+        /
+        Session
+        false
+        false
+        user_image
+        quickfix-dev.localhost
+        /
+        Session
+        false
+        false
+    
+    GET /api/resource/Job Card - list Job Cards (use session cookie from browser)
+    http://quickfix-dev.localhost:8000/api/resource/Job Card/
+        {"data":[{"name":"JC-2026-00010"},{"name":"JC-2026-00011"},{"name":"JC-2026-00012"}]}
+    
+    GET /api/resource/Job Card/JC-0001 - single doc
+    http://quickfix-dev.localhost:8000/api/resource/Job Card/JC-2026-00012
+        {"data":{"name":"JC-2026-00012","owner":"Administrator","creation":"2026-04-13 13:32:52.852679","modified":"2026-04-13 17:55:42.292503","modified_by":"Administrator","docstatus":1,"idx":0,"custom_labour":"Labour","customer_name":"keerthi","customer_phone":"1234567890","device_type":"Smartphone","device_brand":"Xiamoi","device_model":"X12","problem_description":"<div class=\"ql-editor read-mode\"><p>ergbrgd</p></div>","assigned_technician":"TECH-0002","diagnosis_notes":"<div class=\"ql-editor read-mode\"><p>m,ml l</p></div>","estimated_cost":400.0,"diagnosis_date":"2026-04-11","priority":"Urgent","parts_total":150.0,"labour_charge":500.0,"final_amount":650.0,"payment_status":"Paid","delivery_date":"2026-04-13","status":"For Delivery","doctype":"Job Card","parts_used":[{"name":"nu06k1secc","owner":"Administrator","creation":"2026-04-13 13:32:52.852679","modified":"2026-04-13 17:55:42.292503","modified_by":"Administrator","docstatus":1,"idx":1,"part":"Sp-2026-00001","part_name":"Mic","unit_price":150.0,"quantity":1.0,"total_price":150.0,"parent":"JC-2026-00012","parentfield":"parts_used","parenttype":"Job Card","doctype":"Part Usage Entry"}]}}
+    
+    POST /api/resource/Spare Part - create a part
+    http://quickfix-dev.localhost:8000/api/resource/Spare Part?part_name=speaker
+    
+        {"data":{"name":"Sp-2026-00002","owner":"Administrator","creation":"2026-04-15 14:53:48.205082","modified":"2026-04-15 14:53:48.205082","modified_by":"Administrator","docstatus":0,"idx":0,"part_name":"speaker","unit_cost":0.0,"selling_price":0.0,"stock_qty":0.0,"reorder_level":5.0,"is_active":1,"doctype":"Spare Part"}}
+
+    PUT /api/resource/Spare Part/PART-0001 - update a field
+    http://quickfix-dev.localhost:8000/api/resource/Spare Part/Sp-2026-00002?part_name=Mobile speaker
+        {"data":{"name":"Sp-2026-00002","owner":"Administrator","creation":"2026-04-15 14:53:48.205082","modified":"2026-04-15 14:57:41.387670","modified_by":"Administrator","docstatus":0,"idx":0,"part_name":"Mobile speaker","unit_cost":0.0,"selling_price":0.0,"stock_qty":0.0,"reorder_level":5.0,"is_active":1,"doctype":"Spare Part"}}
+    
+    DELETE /api/resource/Spare Part/PART-0001 - delete it
+    http://quickfix-dev.localhost:8000/api/resource/Spare Part/Sp-2026-00002
+        {"data":"ok"}
+    
+CURL command with authorization with api secret key and value
+    kee_frappe@keerthi-LOQ-15ARP9:~/frappe-bench$ curl http://quickfix-dev.localhost:8000/api/method/quickfix.api.generate_monthly_revenue_report?year=2026 -H "Authorization:token 0914831b8f1a4ae:ace766af6a4d41a"
+{"message":{"status":"success","year":2026,"total_revenue":500.0}}
     
 
+    
+    what is the difference between session cookie auth and token
+    auth? Which is appropriate for browser use and which for server-to-server?
+        The session cookies are stored in the web browser to authorize the resources and method you access don't authorization for every request and response it is better for browser app and the token auth where we send during every request and response where it is stateless and where it suits for server to server request and response
+
+Output of Task C
+    curl "http://quickfix-dev.localhost:8000/api/method/quickfix.api.get_job_summary?job_card_name=JC-2026-00012" \
+  -H "Authorization: token 0914831b8f1a4ae:ace766af6a4d41a"
+{"message":{"name":"JC-2026-00012","customer_name":"keerthi","status":"For Delivery","estimated_cost":400.0,"creation":"2026-04-13 13:32:52.852679","today_date":"2026-04-15"}} //with serialization of date
+
+Failed output
+    kee_frappe@keerthi-LOQ-15ARP9:~/frappe-bench$ curl "http://quickfix-dev.localhost:8000/api/method/quickfix.api.get_job_summary?job_card_name=JC-2026-00015"   -H "Authorization: token 0914831b8f1a4ae:ace766af6a4d41a"{"message":{"error":"Not found"}}
+
+Output of Task D
+    kee_frappe@keerthi-LOQ-15ARP9:~/frappe-bench$ curl "http://quickfix-dev.localhost:8000/api/method/quickfix.api.get_job_by_phone?phone=1234567890" 
+    {"message":{"name":"JC-2026-00013","status":"Delivered"}}
+
+    kee_frappe@keerthi-LOQ-15ARP9:~/frappe-bench$ curl "http://quickfix-dev.localhost:8000/api/method/quickfix.api.get_job_by_phone?phone=1234567890" 
+    {"message":{"name":"JC-2026-00013","status":"Delivered"}}
+
+    kee_frappe@keerthi-LOQ-15ARP9:~/frappe-bench$ curl "http://quickfix-dev.localhost:8000/api/method/quickfix.api.get_job_by_phone?phone=1234567890" 
+    {"message":{"error":"Too many requests.Try again later"}}
+
+    Explain in README: what are the real risks of allow_guest=True endpoints? List 3
+    specific attack vectors.
+        In this scenario where every one can access the api methods without any rate limits and the three risk vectors are
+            Enumeration Attack-user can try multiple inputs to get the valid data
+            
+            DOS(Denial of service)-where the guest user can send thousands of request which will affect the server and leads to the crash
+
+            Data Scraping-Where guest user can scrap mutiple data without any permissions
+        
+
+    
 
 
     

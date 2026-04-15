@@ -39,11 +39,13 @@
    "options": "Device Type"
   },
   {
+   "default": "0",
    "fieldname": "unit_cost",
    "fieldtype": "Currency",
    "label": "Unit Cost"
   },
   {
+   "default": "0",
    "fieldname": "selling_price",
    "fieldtype": "Currency",
    "label": "Selling Price"
@@ -76,7 +78,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-04-03 16:08:01.491620",
+ "modified": "2026-04-15 14:53:04.104509",
  "modified_by": "Administrator",
  "module": "QuickFix",
  "name": "Spare Part",

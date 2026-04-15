@@ -27,7 +27,7 @@ class JobCard(Document):
 			frappe.throw(_("You must assign the Technician"))
 
 	def before_submit(self):
-		if self.status != "For Delivery":
+		if self.status not in ["For Delivery", "Delivered"]:
 			frappe.throw(_("You can submit only during the Delivery"))
 		for item in self.parts_used:
 			qty = frappe.db.get_value("Spare Part", {item.part_name == "part_name"}, "stock_qty")
