@@ -527,6 +527,9 @@ Questions of K1
 
         long-Which can schedule using the enqueue which run the heavy load processes and can give the timeout to terminate to avoid running so long time without running other jobs
     
+    Explain retry behavior: how many times does Frappe retry a failed background job by default?
+        Frappe will not retry the background jobs by default where user should manually retry that and also where if it can retry defaulty there is a cause of infinite loop so where we can avoid the multiple retry using Idempotency and which is safer too.
+    
 
 
 

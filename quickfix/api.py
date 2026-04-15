@@ -8,7 +8,7 @@ import qrcode
 from frappe import _
 from frappe.client import get_count
 from frappe.query_builder import DocType
-from frappe.utils import now, now_datetime, nowdate
+from frappe.utils import get_last_day, getdate, now, now_datetime, nowdate
 
 
 @frappe.whitelist
@@ -173,25 +173,44 @@ def get_qr_code(name: str) -> str:
 
 
 @frappe.whitelist()
-def generate_monthly_revenue_report():
-	try:
-		from_date = frappe.utils.month_start(nowdate())
-		to_date = frappe.utils.month_end(nowdate())
+def generate_monthly_revenue_report(year: int):
+	# 	try:
+	# 		months=range(1,13)
+	# 		total_year_revenue=0
+	# 		for i,month in enumerate(months,1):
+	# 			from_date=f"{year}--{month:02d}-01"
+	# 			to_date=frappe.utils.get_last_day(from_date)
+	# 			jobs=frappe.get_all(
+	# 				"Job Card",
+	# 				filters={
+	# 					"status":"Delivered",
+	# 					"delivery_date":["between",[from_date,to_date]]
+	# 				},
+	# 				fields=["estimated_cost"]
+	# 			)
+	# 			monthly_revenue=sum(j.estimated_cost or 0 for j in jobs)
+	# 			total_year_revenue+=monthly_revenue
+	# 			frappe.publish_progress(
+	# 				percent=round(i/12 *100),
+	# 				title="Generating Revenue Report",
+	# 				description=f"processing month{month}..."
+	# 			)
+	# 		frappe.logger().info(f"Total Revenue for {year}:{total_year_revenue}")
+	# 		return{
+	# 			"status":"success",
+	# 			"year":year,
+	# 			"total_revenue":total_year_revenue
+	# 		}
+	# 	except Exception:
+	# 		frappe.log_error(
+	# 			title="Yearly Revenue Report Failed",
+	# 			message=frappe.get_traceback()
+	# 		)
 
-		jobs = frappe.get_all(
-			"Job Card",
-			filters={"status": "Delivered", "completion_date": ["between", [from_date, to_date]]},
-			fields=["name", "estimated_cost"],
-		)
+	raise Exception("simulated failure testing")
 
-		total_revenue = sum(j.estimated_cost or 0 for j in jobs)
 
-		frappe.logger().info(f"Monthly Revenue ({from_date} to {to_date}): {total_revenue}")
-
-		print("Successfully Executed")  # ✅ fixed indentation
-
-		return {"status": "success", "total_revenue": total_revenue, "count": len(jobs)}
-
-	except Exception:
-		frappe.log_error(title="Monthly Revenue Report Failed", message=frappe.get_traceback())
-		raise
+@frappe.whitelist()
+def monthly_performance(year: int):
+	frappe.enqueue("quickfix.api.generate_monthly_revenue_report", queue="long", timeout=600, year=2026)
+	return "Job queued"
