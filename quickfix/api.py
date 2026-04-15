@@ -228,24 +228,24 @@ def monthly_performance(year: int):
 # 	return job
 
 
-RATE_LIMIT = 2
+# RATE_LIMIT = 2
 
 
-@frappe.whitelist(allow_guest=True)
-def get_job_by_phone():
-	ip = frappe.local.request_ip or "unknown"
-	current_minute = now_datetime().strftime("%Y-%m-%d-%H-%M")
-	cache_key = f"rate_limit:{ip}:{current_minute}"
-	count = frappe.cache().incr(cache_key)
+# @frappe.whitelist(allow_guest=True)
+# def get_job_by_phone():
+# 	ip = frappe.local.request_ip or "unknown"
+# 	current_minute = now_datetime().strftime("%Y-%m-%d-%H-%M")
+# 	cache_key = f"rate_limit:{ip}:{current_minute}"
+# 	count = frappe.cache().incr(cache_key)
 
-	if count == 1:
-		frappe.cache().expire(cache_key, 60)
-	if count > RATE_LIMIT:
-		frappe.local.response["http_status_code"] = 429
-		return {"error": _("Too many requests.Try again later")}
-	phone = frappe.form_dict.get("phone")
-	if not phone:
-		frappe.local.response["http_status_code"] = 400
-		return {"error": _("phone is required")}
-	job = frappe.get_value("Job Card", {"Customer_phone": phone}, ["name", "status"], as_dict=True)
-	return job or {"message": _("No job found")}
+# 	if count == 1:
+# 		frappe.cache().expire(cache_key, 60)
+# 	if count > RATE_LIMIT:
+# 		frappe.local.response["http_status_code"] = 429
+# 		return {"error": _("Too many requests.Try again later")}
+# 	phone = frappe.form_dict.get("phone")
+# 	if not phone:
+# 		frappe.local.response["http_status_code"] = 400
+# 		return {"error": _("phone is required")}
+# 	job = frappe.get_value("Job Card", {"Customer_phone": phone}, ["name", "status"], as_dict=True)
+# 	return job or {"message": _("No job found")}
