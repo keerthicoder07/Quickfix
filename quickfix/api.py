@@ -206,26 +206,26 @@ def monthly_performance(year: int):
 	return "Job queued"
 
 
-@frappe.whitelist(allow_guest=True)
-def get_job_summary():
-	job_card_name = frappe.form_dict.get("job_card_name")
+# @frappe.whitelist(allow_guest=True)
+# def get_job_summary():
+# 	job_card_name = frappe.form_dict.get("job_card_name")
 
-	if not job_card_name:
-		frappe.local.response["http_status_code"] = 400
-		return {"error": _("job_card_name is required")}
+# 	if not job_card_name:
+# 		frappe.local.response["http_status_code"] = 400
+# 		return {"error": _("job_card_name is required")}
 
-	if not frappe.db.exists("Job Card", job_card_name):
-		frappe.local.response["http_status_code"] = 404
-		return {"error": _("Not found")}
+# 	if not frappe.db.exists("Job Card", job_card_name):
+# 		frappe.local.response["http_status_code"] = 404
+# 		return {"error": _("Not found")}
 
-	job = frappe.get_value(
-		"Job Card",
-		job_card_name,
-		["name", "customer_name", "status", "estimated_cost", "creation"],
-		as_dict=True,
-	)
-	job["today_date"] = getdate()
-	return job
+# 	job = frappe.get_value(
+# 		"Job Card",
+# 		job_card_name,
+# 		["name", "customer_name", "status", "estimated_cost", "creation"],
+# 		as_dict=True,
+# 	)
+# 	job["today_date"] = getdate()
+# 	return job
 
 
 RATE_LIMIT = 2
