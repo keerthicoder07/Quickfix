@@ -626,6 +626,15 @@ Output of Task D
             DOS(Denial of service)-where the guest user can send thousands of request which will affect the server and leads to the crash
 
             Data Scraping-Where guest user can scrap mutiple data without any permissions
+Questions of M1
+    What Python functions/modules are blocked in the Server Script sandbox?
+        In the sandbox of server script the functions and modules in the network and file operation are blocked because the user cannot access the file and cannot send the requests in the network to prevent the resources and it also blocks the os module and functions also to prevent the system
+    List 3 things you CANNOT do in a Server Script that you can do in app code.
+        Where in the app code we can access the modules and functions of os,file and network which can be handled securely and only the developers have the access and they can give the authroization to the users to use these three services
+    Give 2 scenarios where Server Scripts are acceptable, and 2 where you should insist on app code instead
+        In the server script where we can write the minimal field changes and cannot write the complex bussiness logic and we can write the validations and quick customizable code for the user and can write the light weight internal api like taking count of jobs etc and can assign simple scheduler jobs
+    What is the governance/maintainability risk of Server Scripts?
+        The risks are we can track the changes since not track by git where it will directly store in db and it is hard to debug and there are some security risks since admin can write unsafe code and there can be duplication of processes
         
 
     
