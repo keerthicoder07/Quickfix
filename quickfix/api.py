@@ -8,7 +8,7 @@ import qrcode
 from frappe import _
 from frappe.client import get_count
 from frappe.query_builder import DocType
-from frappe.utils import now, now_datetime, nowdate
+from frappe.utils import get_last_day, getdate, now, now_datetime, nowdate
 
 
 @frappe.whitelist
@@ -142,7 +142,7 @@ def custom_get_count(
 	debug: bool = False,
 	cache: bool = False,
 ) -> str:
-	print("Override called")
+	# print("Override called")
 	frappe.get_doc(
 		{
 			"doctype": "Audit Log",
@@ -173,25 +173,79 @@ def get_qr_code(name: str) -> str:
 
 
 @frappe.whitelist()
-def generate_monthly_revenue_report():
+def generate_monthly_revenue_report(year: int):
 	try:
-		from_date = frappe.utils.month_start(nowdate())
-		to_date = frappe.utils.month_end(nowdate())
-
-		jobs = frappe.get_all(
-			"Job Card",
-			filters={"status": "Delivered", "completion_date": ["between", [from_date, to_date]]},
-			fields=["name", "estimated_cost"],
-		)
-
-		total_revenue = sum(j.estimated_cost or 0 for j in jobs)
-
-		frappe.logger().info(f"Monthly Revenue ({from_date} to {to_date}): {total_revenue}")
-
-		print("Successfully Executed")  # ✅ fixed indentation
-
-		return {"status": "success", "total_revenue": total_revenue, "count": len(jobs)}
-
+		months = range(1, 13)
+		total_year_revenue = 0
+		for i, month in enumerate(months, 1):
+			from_date = f"{year}--{month:02d}-01"
+			to_date = frappe.utils.get_last_day(from_date)
+			jobs = frappe.get_all(
+				"Job Card",
+				filters={"status": "Delivered", "delivery_date": ["between", [from_date, to_date]]},
+				fields=["estimated_cost"],
+			)
+			monthly_revenue = sum(j.estimated_cost or 0 for j in jobs)
+			total_year_revenue += monthly_revenue
+			frappe.publish_progress(
+				percent=round(i / 12 * 100),
+				title="Generating Revenue Report",
+				description=f"processing month{month}...",
+			)
+		frappe.logger().info(f"Total Revenue for {year}:{total_year_revenue}")
+		return {"status": "success", "year": year, "total_revenue": total_year_revenue}
 	except Exception:
-		frappe.log_error(title="Monthly Revenue Report Failed", message=frappe.get_traceback())
-		raise
+		frappe.log_error(title="Yearly Revenue Report Failed", message=frappe.get_traceback())
+
+		raise  # Exception("simulated failure testing")
+
+
+@frappe.whitelist()
+def monthly_performance(year: int):
+	frappe.enqueue("quickfix.api.generate_monthly_revenue_report", queue="long", timeout=600, year=2026)
+	return "Job queued"
+
+
+# @frappe.whitelist(allow_guest=True)
+# def get_job_summary():
+# 	job_card_name = frappe.form_dict.get("job_card_name")
+
+# 	if not job_card_name:
+# 		frappe.local.response["http_status_code"] = 400
+# 		return {"error": _("job_card_name is required")}
+
+# 	if not frappe.db.exists("Job Card", job_card_name):
+# 		frappe.local.response["http_status_code"] = 404
+# 		return {"error": _("Not found")}
+
+# 	job = frappe.get_value(
+# 		"Job Card",
+# 		job_card_name,
+# 		["name", "customer_name", "status", "estimated_cost", "creation"],
+# 		as_dict=True,
+# 	)
+# 	job["today_date"] = getdate()
+# 	return job
+
+
+# RATE_LIMIT = 2
+
+
+# @frappe.whitelist(allow_guest=True)
+# def get_job_by_phone():
+# 	ip = frappe.local.request_ip or "unknown"
+# 	current_minute = now_datetime().strftime("%Y-%m-%d-%H-%M")
+# 	cache_key = f"rate_limit:{ip}:{current_minute}"
+# 	count = frappe.cache().incr(cache_key)
+
+# 	if count == 1:
+# 		frappe.cache().expire(cache_key, 60)
+# 	if count > RATE_LIMIT:
+# 		frappe.local.response["http_status_code"] = 429
+# 		return {"error": _("Too many requests.Try again later")}
+# 	phone = frappe.form_dict.get("phone")
+# 	if not phone:
+# 		frappe.local.response["http_status_code"] = 400
+# 		return {"error": _("phone is required")}
+# 	job = frappe.get_value("Job Card", {"Customer_phone": phone}, ["name", "status"], as_dict=True)
+# 	return job or {"message": _("No job found")}
