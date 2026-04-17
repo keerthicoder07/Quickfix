@@ -661,6 +661,23 @@ Questions of M2
     metadata cache?
         we use becnh clear-cache which will clear the redis meta cache and updates the meta data,property setters,fields,doctypes and role permissions so any changes made in the doctype will be render after the cache cleared from the redis cache.
 
+Concept of M3
+    Use frappe.logger("quickfix") to get a named logger-Where it creates the new log file in the site/logs of that app so we can save the logs there seaprately to track the warnings errors and info
+
+    Log at different levels: .info(), .warning(), .error() - show where output goes
+    (quickfix.log file in site logs/)
+
+    The output that stores in quickfix.log
+        2026-04-17 11:20:18,642 ERROR quickfix TEST ERROR LOG
+        2026-04-17 11:35:46,662 INFO quickfix TEST INFO LOG
+        2026-04-17 11:35:46,662 WARNING quickfix TEST WARNING LOG
+        2026-04-17 11:35:46,662 ERROR quickfix TEST ERROR LOG
+        2026-04-17 11:47:31,218 INFO quickfix Job card created
+        2026-04-17 11:50:38,049 WARNING quickfix Test warninig
+    
+    frappe.log_error-which will stores the error in the errorlog doctype and where we can save the custom errors using the exception block and can store the error using log_error function in the frappe.
+
+
 
 
         
