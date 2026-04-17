@@ -115,12 +115,21 @@ def get_job_cards_safe():
 @frappe.whitelist()
 def send_job_ready_email(job_card: str, user: str, customer_email: str) -> None:
 	email = frappe.db.get_value("User", user, "email")
+
 	if not email:
 		return
 	frappe.sendmail(
 		recipients=[email, customer_email],
 		subject=("Your Job is Ready"),
 		message=(f"Your jobcard {job_card} is ready for delivery"),
+		attachments=[
+			{
+				"fname": f"{job_card}.pdf",
+				"fcontent": frappe.get_print(
+					doctype="Job Card", name=job_card, print_format="Job Card Reciept", as_pdf=True
+				),
+			}
+		],
 	)
 
 

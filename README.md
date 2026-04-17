@@ -715,6 +715,12 @@ Concepts of N1
         Explain: what is the risk of committing site_config.json to git?
             so in the site.config where we have many secret key and value pairs so if commit it to the git anyone who have the access to repo can see the secret values so there is the security threat
 
+Questions of N2
+    Debug email failure: explain what to check in Email Queue, SMTP logs, and Error
+    Log when an email fails to send?
+        When the email is not sent we should check the Email Queue and their status whether it is in sent,not sent and then check the smtp logs whether any errors happened like authentication errors and the next is to check error log whether any functions that invloved has errors or not.
+    
+
         
 
     
