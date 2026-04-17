@@ -690,6 +690,35 @@ Task C
     Describe how you would debug a bug that only occurs in production (not reproduciblein dev) using only: Error Log records, Audit Log, and frappe.logger output - withoutenabling developer_mode
         So without reproducible in dev we can debug the error usinf the error log which helps us to find what error happens and by using the looger we can come to know about the flow of execution and at last Audit log so we can come to know what data has changed so we can easily debug.
 
+Concepts of N1
+    SQL injection prevention (complete audit):
+        Where always the parameterized is better because when we use f string and give the variable there is threat to sql injection so we use the parameterized method even we have the escape method still there also we have some threats so always using the parameterized method is better
+    
+    Task B - allow_guest risks:
+        When we not validate the data given by the guest where they will enumerate with different combinations of data to access the job card,There is threat of sql injection and at last they can give multiple requests and which leads to the ddos attack which crash the server
+
+    Task C
+        Describe what would happen if a malicious intern set ignore_permissions=True on a @whitelist(allow_guest=True) endpoint?
+            Where the any user can have the access to the senstive and hidden data because it does not apply any permissions and leads ot data leak and data theft even they can modify that data also so there should be always careful when using ignore_permissions
+    
+    Task D
+        Explain in README: when would you use private files vs public files?
+            So we keep the files in public where anyone can see and access it fro example landing page contents which can view by anyone and in the private we keep authourized files that can be accessible by only the auhtorized persons if any one try to access it shows not accessible
+    
+    Task E
+        Explain the issues with API key hardcoded in Python source code
+            When we keep the API key in python code so who ever has the git repo access they can take the secure key so we should not keep the api key in the python source code
+
+        Explain: why should secrets NEVER be in common_site_config.json?
+            In the common site where every site use that data so there is a threat in leak of data across the sites and no isolation between the environments and hard to manage the security
+        
+        Explain: what is the risk of committing site_config.json to git?
+            so in the site.config where we have many secret key and value pairs so if commit it to the git anyone who have the access to repo can see the secret values so there is the security threat
+
+        
+
+    
+
 
 
 
