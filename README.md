@@ -662,6 +662,7 @@ Questions of M2
         we use becnh clear-cache which will clear the redis meta cache and updates the meta data,property setters,fields,doctypes and role permissions so any changes made in the doctype will be render after the cache cleared from the redis cache.
 
 Concept of M3
+Task A
     Use frappe.logger("quickfix") to get a named logger-Where it creates the new log file in the site/logs of that app so we can save the logs there seaprately to track the warnings errors and info
 
     Log at different levels: .info(), .warning(), .error() - show where output goes
@@ -676,6 +677,18 @@ Concept of M3
         2026-04-17 11:50:38,049 WARNING quickfix Test warninig
     
     frappe.log_error-which will stores the error in the errorlog doctype and where we can save the custom errors using the exception block and can store the error using log_error function in the frappe.
+
+Task B
+    Trigger a real error in a background job (unhandled exception)
+        when a error occur in background job where ot automatically stores the error snapshot in the DB and also marks as job failed in the redis queue and also stores the error in errorlog doctype
+    Find it in Setup - Error Log. What fields does an Error Log record contain?
+        In the error log doctype where we stores the failure in execution and background jobs where it stored with fields of title and error fields in error filed we contain the traceback error.
+    Find it in the RQ dashboard (if enabled). How do you requeue a failed job?
+        In the RQ dashboard where we contains the success of the job whether it finished or failed and where the frappe does not automatically retry when the the job fails instead we shpuld write the logic or manually add the job in queue to retry
+
+Task C
+    Describe how you would debug a bug that only occurs in production (not reproduciblein dev) using only: Error Log records, Audit Log, and frappe.logger output - withoutenabling developer_mode
+        So without reproducible in dev we can debug the error usinf the error log which helps us to find what error happens and by using the looger we can come to know about the flow of execution and at last Audit log so we can come to know what data has changed so we can easily debug.
 
 
 
