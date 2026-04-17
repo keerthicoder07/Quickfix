@@ -626,6 +626,43 @@ Output of Task D
             DOS(Denial of service)-where the guest user can send thousands of request which will affect the server and leads to the crash
 
             Data Scraping-Where guest user can scrap mutiple data without any permissions
+Questions of M1
+    What Python functions/modules are blocked in the Server Script sandbox?
+        In the sandbox of server script the functions and modules in the network and file operation are blocked because the user cannot access the file and cannot send the requests in the network to prevent the resources and it also blocks the os module and functions also to prevent the system
+    List 3 things you CANNOT do in a Server Script that you can do in app code.
+        Where in the app code we can access the modules and functions of os,file and network which can be handled securely and only the developers have the access and they can give the authroization to the users to use these three services
+    Give 2 scenarios where Server Scripts are acceptable, and 2 where you should insist on app code instead
+        In the server script where we can write the minimal field changes and cannot write the complex bussiness logic and we can write the validations and quick customizable code for the user and can write the light weight internal api like taking count of jobs etc and can assign simple scheduler jobs
+    What is the governance/maintainability risk of Server Scripts?
+        The risks are we can track the changes since not track by git where it will directly store in db and it is hard to debug and there are some security risks since admin can write unsafe code and there can be duplication of processes
+
+Questions of M2
+    Run: frappe.cache.get_value("bootinfo") - what does it contain?
+        where in the boot info we can get the info of
+        Modules used in the desk
+        User session info
+        System defaults
+        permission snapshot etc.
+    Run: frappe.cache.get_value("quickfix:translations") or similar - find where
+    translations are cached
+        It contains the translations of the user for their language and if we can't locate that we can use the cache_getkeys() to take key values where it stored so we can fid it there.
+    Run frappe.clear_cache() and observe what changes in the browser
+        where if we run this in the browser we can see the new values that gets updated where it removes the old value in redis cache and update the new to render the new data updates which include the permissions,role and logic changes.
+    
+    Demonstrate stale UI: without cache invalidation, show that the dashboard chart
+    shows old data after a Job Card status change
+        In this where on update of the job card the old cache is deleted and where the db query runs and get the new data for the chart immediately and not wait for the expire period.
+    
+    After making a JS change, the browser shows old JS. Explain: what command clears
+    the asset cache? What role does bench build --app quickfix play?
+        So to make the browser render with new chages in assests and ui we will use the command build --app quickfix which will clear the assest cache and rebuild the bundle with cache and make the new ui and chages to be rendered
+    
+    After making a DocType change, users see old field labels. What clears the DocType
+    metadata cache?
+        we use becnh clear-cache which will clear the redis meta cache and updates the meta data,property setters,fields,doctypes and role permissions so any changes made in the doctype will be render after the cache cleared from the redis cache.
+
+
+
         
 
     

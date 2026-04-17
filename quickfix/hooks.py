@@ -278,3 +278,4 @@ override_whitelisted_methods = {"frappe.client.get_count": "quickfix.api.custom_
 
 after_install = ["quickfix.install.after_install", "quickfix.setup.apply_monkey_patches"]
 scheduler_events = {"daily": ["quickfix.utils.check_low_stock"]}
+extend_bootinfo = "quickfix.boot.extend_bootinfo"
