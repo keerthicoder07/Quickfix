@@ -249,12 +249,12 @@ app_license = "mit"
 
 fixtures = [
 	{"doctype": "Device Type", "filters": [["device_type", "in", ["Smartphone", "Laptop", "Tablet"]]]},
-	{"doctype": "Role", "filters": [["name", "in", ["QF Service Staff", "QF Technician", "QF Manager"]]]},
-	{"doctype": "Custom DocPerm"},
-	{"doctype": "Custom Field"},
-	{"doctype": "Property Setter"},
-	{"doctype": "Workspace"},
-	{"doctype": "QuickFix Settings"},
+	# 	{"doctype": "Role", "filters": [["name", "in", ["QF Service Staff", "QF Technician", "QF Manager"]]]},
+	# 	{"doctype": "Custom DocPerm"},
+	# 	{"doctype": "Custom Field"},
+	# 	{"doctype": "Property Setter"},
+	# 	{"doctype": "Workspace"},
+	# 	{"doctype": "QuickFix Settings"},
 ]
 permission_query_conditions = {"Job Card": "quickfix.api.get_job_card_permission_query_conditions"}
 override_doctype_class = {"Job Card": "quickfix.quickfix.overrides.custom_job_card.CustomJobCard"}
