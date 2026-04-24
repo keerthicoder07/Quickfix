@@ -5,8 +5,7 @@ on:
     branches:
       - develop
   pull_request:
-    branches:
-      - develop
+      -dev
 
 concurrency:
   group: develop-quickfix-${{ github.event.number }}
@@ -14,73 +13,98 @@ concurrency:
 
 jobs:
   tests:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
     name: Server
 
     services:
+      redis-cache:
+        image: redis:alpine
+        ports:
+          - 13000:6379
+
+      redis-queue:
+        image: redis:alpine
+        ports:
+          - 11000:6379
+
       mariadb:
         image: mariadb:10.6
         env:
           MYSQL_ROOT_PASSWORD: root
         ports:
           - 3306:3306
-        command: >
-          --character-set-server=utf8mb4
-          --collation-server=utf8mb4_unicode_ci
         options: >-
-          --health-cmd="mysqladmin ping -h localhost -uroot -proot"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
-
-      redis:
-        image: redis:7
-        ports:
-          - 6379:6379
+          --health-cmd="mariadb-admin ping"
+          --health-interval=5s
+          --health-timeout=2s
+          --health-retries=3
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
 
-      - name: Cache pip downloads
-        uses: actions/cache@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Cache pip
+        uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - name: Install Bench
-        run: pip install frappe-bench
+      - name: Install MariaDB Client
+        run: sudo apt-get update && sudo apt-get install -y mariadb-client
 
-      - name: Initialize Bench
-        run: bench init frappe-bench --frappe-branch version-15 --skip-assets
+      - name: Setup Bench
+        run: |
+          pip install frappe-bench
+          bench init --skip-assets --python "$(which python)" frappe-bench
 
-      - name: Create Site
+      - name: Configure DB charset
+        run: |
+          mariadb -h 127.0.0.1 -P 3306 -u root -proot -e "SET GLOBAL character_set_server = 'utf8mb4';"
+          mariadb -h 127.0.0.1 -P 3306 -u root -proot -e "SET GLOBAL collation_server = 'utf8mb4_unicode_ci';"
+
+      - name: Install App
         working-directory: frappe-bench
         run: |
-          bench new-site test.localhost \
-          --mariadb-root-password root \
-          --admin-password admin \
-          --db-name test_quickfix
+          bench get-app quickfix $GITHUB_WORKSPACE
+          bench setup requirements --dev
 
-      - name: Checkout Quickfix App into Bench
-        uses: actions/checkout@v4
-        with:
-          path: frappe-bench/apps/quickfix
+          # Create site with Redis configs
+          bench new-site test_site \
+            --db-root-password root \
+            --admin-password admin \
+            --mariadb-user-host-login-scope='%' \
+            --no-mariadb-socket
 
-      - name: Install Quickfix App
-        working-directory: frappe-bench
-        run: bench --site test.localhost install-app quickfix
+          # Set Redis URLs (VERY IMPORTANT)
+          bench --site test_site set-config redis_cache redis://localhost:13000
+          bench --site test_site set-config redis_queue redis://localhost:11000
+          bench --site test_site set-config redis_socketio redis://localhost:11000
+
+          # Enable test mode
+          bench --site test_site set-config allow_tests true
+
+          bench --site test_site install-app quickfix
+
+        env:
+          CI: "Yes"
 
       - name: Run Tests
         working-directory: frappe-bench
-        continue-on-error: false
-        run: bench --site test.localhost run-tests --app quickfix --verbose
+        run: |
+          bench --site test_site run-tests --app quickfix --verbose
+        env:
+          TYPE: server
