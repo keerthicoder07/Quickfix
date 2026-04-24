@@ -66,6 +66,11 @@ jobs:
 
       - name: Install MariaDB Client
         run: sudo apt-get update && sudo apt-get install -y mariadb-client
+      
+      - name: Install Redis
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y redis-server
 
       - name: Setup Bench
         run: |
