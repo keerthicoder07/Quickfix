@@ -278,6 +278,6 @@ website_route_rules = [{"from_route": "/track-job", "to_route": "track-job"}]
 portal_menu_items = [{"title": "Track My Job", "route": "/track-job", "role": "Guest"}]
 override_whitelisted_methods = {"frappe.client.get_count": "quickfix.api.custom_get_count"}
 
-after_install = ["quickfix.install.after_install", "quickfix.setup.apply_monkey_patches"]
+after_install = ["quickfix.install.after_install"]
 scheduler_events = {"daily": ["quickfix.utils.check_low_stock"]}
 extend_bootinfo = "quickfix.boot.extend_bootinfo"
