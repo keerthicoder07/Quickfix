@@ -122,9 +122,6 @@ concurrency:
 jobs:
   tests:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-    name: Server
 
     services:
       redis-cache:
@@ -150,72 +147,56 @@ jobs:
           --health-retries=3
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      # ✅ FIX 1: Python version
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      # ✅ Python 3.11
+      - uses: actions/setup-python@v4
         with:
           python-version: "3.11"
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      # ✅ FIX 2: Install Redis in runner
+      # ✅ Fix Redis error
       - name: Install Redis
         run: |
           sudo apt-get update
           sudo apt-get install -y redis-server
 
-      - name: Cache pip
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
       - name: Install MariaDB Client
         run: sudo apt-get update && sudo apt-get install -y mariadb-client
 
-      # ✅ Setup bench
-      - name: Setup Bench
-        run: |
-          pip install frappe-bench
-          bench init --skip-assets --python "$(which python)" ~/frappe-bench
+      - name: Install Bench
+        run: pip install frappe-bench
 
-      # ✅ FIX 3: DB charset
-      - name: Configure DB Charset
+      # ✅ CRITICAL FIX HERE
+      - name: Init Bench
         run: |
-          mariadb -h 127.0.0.1 -P 3306 -u root -proot -e "SET GLOBAL character_set_server = 'utf8mb4';"
-          mariadb -h 127.0.0.1 -P 3306 -u root -proot -e "SET GLOBAL collation_server = 'utf8mb4_unicode_ci';"
+          bench init frappe-bench \
+            --frappe-branch version-15 \
+            --skip-assets \
+            --python "$(which python)"
+
+      - name: Configure DB
+        run: |
+          mariadb -h 127.0.0.1 -u root -proot -e "SET GLOBAL character_set_server = 'utf8mb4';"
+          mariadb -h 127.0.0.1 -u root -proot -e "SET GLOBAL collation_server = 'utf8mb4_unicode_ci';"
 
       - name: Install App
-        working-directory: /home/runner/frappe-bench
+        working-directory: frappe-bench
         run: |
           bench get-app quickfix $GITHUB_WORKSPACE
           bench setup requirements --dev
 
-          # Create site
           bench new-site test_site \
             --db-root-password root \
             --admin-password admin
 
-          # Enable testing
           bench --site test_site set-config allow_tests true
-
-          # Install app
           bench --site test_site install-app quickfix
 
-        env:
-          CI: "Yes"
-
       - name: Run Tests
-        working-directory: /home/runner/frappe-bench
+        working-directory: frappe-bench
         run: |
           bench --site test_site run-tests --app quickfix --verbose
-        env:
-          TYPE: server
