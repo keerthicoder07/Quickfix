@@ -5,7 +5,7 @@ on:
     branches:
       - develop
   pull_request:
-      -dev
+      - develop
 
 concurrency:
   group: develop-quickfix-${{ github.event.number }}
