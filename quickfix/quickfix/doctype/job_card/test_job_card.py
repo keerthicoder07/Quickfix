@@ -57,3 +57,23 @@ class TestJobCard(FrappeTestCase):
 		expected_labour = 500
 		self.assertEqual(doc.parts_total, expected_parts_total)
 		self.assertEqual(doc.final_amount, expected_parts_total + expected_labour)
+
+	def test_stock_deduction_on_submit(self):
+		part = frappe.get_doc(
+			{
+				"doctype": "Spare Part",
+				"part_name": "screen",
+				"stock_qty": 10,
+				"unit_cost": 100,
+				"selling_price": 150,
+			}
+		).insert()
+
+		doc = self.create_job_card()
+
+		doc.append("parts_used", {"part": part.name, "quantity": 2, "unit_price": 150})
+		doc.status = "For Delivery"
+		doc.save()
+		doc.submit()
+		updated_stock = frappe.db.get_value("Spare Part", part.name, "stock_qty")
+		self.assertEqual(updated_stock, 8)

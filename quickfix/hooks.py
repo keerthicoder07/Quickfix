@@ -249,6 +249,8 @@ app_license = "mit"
 
 fixtures = [
 	{"doctype": "Device Type", "filters": [["device_type", "in", ["Smartphone", "Laptop", "Tablet"]]]},
+	{"doctype": "Technician", "filters": [["name", "=", "TECH-0001"]]},
+	{"doctype": "QuickFix Settings"},
 	# 	{"doctype": "Role", "filters": [["name", "in", ["QF Service Staff", "QF Technician", "QF Manager"]]]},
 	# 	{"doctype": "Custom DocPerm"},
 	# 	{"doctype": "Custom Field"},
