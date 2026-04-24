@@ -194,8 +194,10 @@ jobs:
             --admin-password admin
 
           bench --site test_site set-config allow_tests true
+          
           bench --site test_site install-app quickfix
 
+          bench --site test_site set-config mute_emails 1
       - name: Run Tests
         working-directory: frappe-bench
         run: |
