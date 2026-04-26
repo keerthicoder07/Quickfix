@@ -7,4 +7,4 @@ class TestAPI(FrappeTestCase):
 		frappe.db.get_single_value("Quickfix Settings", "shop_name", "Power house")
 		result = frappe.call("quickfix.api.get_shop_name")
 
-		self.assertEqual(result, "Power house")
+		self.assertEqual(result, "Powerhouse")
