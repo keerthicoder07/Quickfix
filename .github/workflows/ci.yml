@@ -157,6 +157,15 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
+          
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/*requirements.txt', '**/pyproject.toml', '**/setup.py', '**/setup.cfg') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+            ${{ runner.os }}-
 
       # ✅ Fix Redis error
       - name: Install Redis
@@ -198,6 +207,8 @@ jobs:
           bench --site test_site install-app quickfix
 
           bench --site test_site set-config mute_emails 1
+        env:
+          CI: 'Yes'
       - name: Run Tests
         working-directory: frappe-bench
         run: |
