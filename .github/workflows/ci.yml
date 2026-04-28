@@ -221,7 +221,7 @@ jobs:
           bench --site test_site --verbose run-tests --app quickfix \2>&1 | tee/tmp/test_output.log
       
       - name: upload Logs 
-        uses: actions/upload-articraft@v4
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: logs-${{matrix.python-version}}-${{github.run_id}}
