@@ -115,12 +115,21 @@ def get_job_cards_safe():
 @frappe.whitelist()
 def send_job_ready_email(job_card: str, user: str, customer_email: str) -> None:
 	email = frappe.db.get_value("User", user, "email")
+
 	if not email:
 		return
 	frappe.sendmail(
 		recipients=[email, customer_email],
 		subject=("Your Job is Ready"),
 		message=(f"Your jobcard {job_card} is ready for delivery"),
+		attachments=[
+			{
+				"fname": f"{job_card}.pdf",
+				"fcontent": frappe.get_print(
+					doctype="Job Card", name=job_card, print_format="Job Card Reciept", as_pdf=True
+				),
+			}
+		],
 	)
 
 
@@ -132,7 +141,7 @@ def rename_technician(old_name: str, new_name: str) -> None:
 		frappe.throw(_("New Technician already exists"))
 	frappe.rename_doc(
 		"Technician", old_name, new_name, merge=False
-	)  # When we give merge=True then whetehr there is document with the new name where that data will be overwite in the old name document so the data will loss
+	)  # When we give merge=True then whether there is document with the new name where that data will be overwite in the old name document so the data will loss
 
 
 @frappe.whitelist()
@@ -151,7 +160,9 @@ def custom_get_count(
 			"user": frappe.session.user,
 			"timestamp": now(),
 		}
-	).insert(ignore_permissions=True)
+	).insert(
+		ignore_permissions=True
+	)  # Here the ignore_permission is valid since it is the system process so whenever the doctype changes for events it will automatically saves so it is acceptable and not user initiated process
 	# frappe.db.commit()
 	count = get_count(doctype, filters, debug, cache)
 	return f"Total_count={count}"

@@ -1,0 +1,19 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Technician",
+  "email": "raj@gmail.com",
+  "employee_id": "001",
+  "joining_date": "2026-04-04",
+  "modified": "2026-04-24 14:53:09.438880",
+  "name": "TECH-0001",
+  "naming_series": null,
+  "notes": null,
+  "phone": "123456789",
+  "photo": null,
+  "specialization": "Smartphone",
+  "status": "Active",
+  "technician_name": "Rajvaradhan",
+  "user": "rajv@gmail.com"
+ }
+]

@@ -661,6 +661,71 @@ Questions of M2
     metadata cache?
         we use becnh clear-cache which will clear the redis meta cache and updates the meta data,property setters,fields,doctypes and role permissions so any changes made in the doctype will be render after the cache cleared from the redis cache.
 
+Concept of M3
+Task A
+    Use frappe.logger("quickfix") to get a named logger-Where it creates the new log file in the site/logs of that app so we can save the logs there seaprately to track the warnings errors and info
+
+    Log at different levels: .info(), .warning(), .error() - show where output goes
+    (quickfix.log file in site logs/)
+
+    The output that stores in quickfix.log
+        2026-04-17 11:20:18,642 ERROR quickfix TEST ERROR LOG
+        2026-04-17 11:35:46,662 INFO quickfix TEST INFO LOG
+        2026-04-17 11:35:46,662 WARNING quickfix TEST WARNING LOG
+        2026-04-17 11:35:46,662 ERROR quickfix TEST ERROR LOG
+        2026-04-17 11:47:31,218 INFO quickfix Job card created
+        2026-04-17 11:50:38,049 WARNING quickfix Test warninig
+    
+    frappe.log_error-which will stores the error in the errorlog doctype and where we can save the custom errors using the exception block and can store the error using log_error function in the frappe.
+
+Task B
+    Trigger a real error in a background job (unhandled exception)
+        when a error occur in background job where ot automatically stores the error snapshot in the DB and also marks as job failed in the redis queue and also stores the error in errorlog doctype
+    Find it in Setup - Error Log. What fields does an Error Log record contain?
+        In the error log doctype where we stores the failure in execution and background jobs where it stored with fields of title and error fields in error filed we contain the traceback error.
+    Find it in the RQ dashboard (if enabled). How do you requeue a failed job?
+        In the RQ dashboard where we contains the success of the job whether it finished or failed and where the frappe does not automatically retry when the the job fails instead we shpuld write the logic or manually add the job in queue to retry
+
+Task C
+    Describe how you would debug a bug that only occurs in production (not reproduciblein dev) using only: Error Log records, Audit Log, and frappe.logger output - withoutenabling developer_mode
+        So without reproducible in dev we can debug the error usinf the error log which helps us to find what error happens and by using the looger we can come to know about the flow of execution and at last Audit log so we can come to know what data has changed so we can easily debug.
+
+Concepts of N1
+    SQL injection prevention (complete audit):
+        Where always the parameterized is better because when we use f string and give the variable there is threat to sql injection so we use the parameterized method even we have the escape method still there also we have some threats so always using the parameterized method is better
+    
+    Task B - allow_guest risks:
+        When we not validate the data given by the guest where they will enumerate with different combinations of data to access the job card,There is threat of sql injection and at last they can give multiple requests and which leads to the ddos attack which crash the server
+
+    Task C
+        Describe what would happen if a malicious intern set ignore_permissions=True on a @whitelist(allow_guest=True) endpoint?
+            Where the any user can have the access to the senstive and hidden data because it does not apply any permissions and leads ot data leak and data theft even they can modify that data also so there should be always careful when using ignore_permissions
+    
+    Task D
+        Explain in README: when would you use private files vs public files?
+            So we keep the files in public where anyone can see and access it fro example landing page contents which can view by anyone and in the private we keep authourized files that can be accessible by only the auhtorized persons if any one try to access it shows not accessible
+    
+    Task E
+        Explain the issues with API key hardcoded in Python source code
+            When we keep the API key in python code so who ever has the git repo access they can take the secure key so we should not keep the api key in the python source code
+
+        Explain: why should secrets NEVER be in common_site_config.json?
+            In the common site where every site use that data so there is a threat in leak of data across the sites and no isolation between the environments and hard to manage the security
+        
+        Explain: what is the risk of committing site_config.json to git?
+            so in the site.config where we have many secret key and value pairs so if commit it to the git anyone who have the access to repo can see the secret values so there is the security threat
+
+Questions of N2
+    Debug email failure: explain what to check in Email Queue, SMTP logs, and Error
+    Log when an email fails to send?
+        When the email is not sent we should check the Email Queue and their status whether it is in sent,not sent and then check the smtp logs whether any errors happened like authentication errors and the next is to check error log whether any functions that invloved has errors or not.
+    
+
+        
+
+    
+
+
 
 
         

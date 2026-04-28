@@ -1,5 +1,7 @@
-import frappe
+from frappe.custom.doctype.property_setter.property_setter import make_property_setter
 
 
 def after_install():
-	frappe.make_property_setter("Job Card", "remarks", "bold", 1, "Check")
+	make_property_setter(
+		doctype="Job Card", fieldname="remarks", property="bold", value=1, property_type="Check"
+	)

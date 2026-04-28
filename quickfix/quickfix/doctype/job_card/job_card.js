@@ -75,6 +75,26 @@ frappe.ui.form.on("Job Card", {
 				);
 			});
 	},
+	// refresh: function (frm) {
+	// 	console.log("A: refresh started");
+
+	// 	frappe.call({
+	// 		method: "frappe.client.get_count",
+	// 		args: { doctype: "Job Card" },
+	// 		async: false,
+	// 		callback: function (r) {
+	// 			console.log("B: count is " + r.message);
+	// 			frm.set_value("imei_or_serial", r.message);
+	// 			console.log("C: value set");
+	// 		},
+	// 	});
+
+	// 	console.log("D: refresh ended");
+
+	// 	setTimeout(function () {
+	// 		console.log("E: timeout done");
+	// 	}, 0);
+	// },
 });
 
 frappe.realtime.on("job_ready", (data) => {

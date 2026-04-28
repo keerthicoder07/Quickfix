@@ -63,6 +63,11 @@ class JobCard(Document):
 			user=self.owner,
 			customer_email=self.customer_email,
 		)
+		logger = frappe.logger("quickfix")
+		logger.setLevel("INFO")
+		logger.setLevel("WARNING")
+		logger.warning("Test warninig")
+		logger.info("Job card created")
 
 	def on_cancel(self):
 		frappe.db.set_value("Job Card", self.name, "status", "Cancelled")

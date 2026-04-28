@@ -249,12 +249,14 @@ app_license = "mit"
 
 fixtures = [
 	{"doctype": "Device Type", "filters": [["device_type", "in", ["Smartphone", "Laptop", "Tablet"]]]},
-	{"doctype": "Role", "filters": [["name", "in", ["QF Service Staff", "QF Technician", "QF Manager"]]]},
-	{"doctype": "Custom DocPerm"},
-	{"doctype": "Custom Field"},
-	{"doctype": "Property Setter"},
-	{"doctype": "Workspace"},
+	{"doctype": "Technician", "filters": [["name", "=", "TECH-0001"]]},
 	{"doctype": "QuickFix Settings"},
+	# 	{"doctype": "Role", "filters": [["name", "in", ["QF Service Staff", "QF Technician", "QF Manager"]]]},
+	# 	{"doctype": "Custom DocPerm"},
+	# 	{"doctype": "Custom Field"},
+	# 	{"doctype": "Property Setter"},
+	# 	{"doctype": "Workspace"},
+	# 	{"doctype": "QuickFix Settings"},
 ]
 permission_query_conditions = {"Job Card": "quickfix.api.get_job_card_permission_query_conditions"}
 override_doctype_class = {"Job Card": "quickfix.quickfix.overrides.custom_job_card.CustomJobCard"}
@@ -276,6 +278,6 @@ website_route_rules = [{"from_route": "/track-job", "to_route": "track-job"}]
 portal_menu_items = [{"title": "Track My Job", "route": "/track-job", "role": "Guest"}]
 override_whitelisted_methods = {"frappe.client.get_count": "quickfix.api.custom_get_count"}
 
-after_install = ["quickfix.install.after_install", "quickfix.setup.apply_monkey_patches"]
+after_install = ["quickfix.install.after_install"]
 scheduler_events = {"daily": ["quickfix.utils.check_low_stock"]}
 extend_bootinfo = "quickfix.boot.extend_bootinfo"

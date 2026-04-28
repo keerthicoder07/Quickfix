@@ -17,4 +17,6 @@ def log_change(doc, method):
 			"user": frappe.session.user,
 			"timestamp": now(),
 		}
-	).insert(ignore_permissions=True)
+	).insert(
+		ignore_permissions=True
+	)  # Here also it is acceptable where it not user intiated process which automatically happens during the events
